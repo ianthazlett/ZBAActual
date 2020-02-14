@@ -47,7 +47,7 @@
 
                 var URL_base = "http://localhost:8080/";
                 var XHR = new XMLHttpRequest();
-                XHR.open("POST", URL_base + "/UserCreate" + Params, true);
+                XHR.open("PUT", URL_base + "/UserCreate" + Params, true);
                 XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
                 //alert(URL_base + "Users/createUser" + Params);
