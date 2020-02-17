@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Creation</title>
+    <link rel = "stylesheet" href="styles/LoginAndAccountCreationLightCSS.css" type="text/css">
+</head>
+<body>
+<div class="PageContent">
+    <script> alert(sessionStorage.getItem("UserID"))</script>
+
+    <!--Find a better name?-->
+    <!--Should link to Homepage-->
+    <h1 id ="WebsiteLogo">Group 16</h1>
+    <h2 id ="CreateAccount">Create Account</h2>
+
+    <form>
+        <div class = "EntryField">
+            Email: <input type="text" name="email" id="email">
+        </div>
+
+        <div class = "EntryField">
+            Password: <input type="text" name="password" id="password">
+        </div>
+
+        <div class = "EntryField">
+            Confirm Password: <input type="text" name="confirmPassword" id="confirmPassword">
+        </div>
+        
+        <div class = "EntryField">
+            Address: <input type="text" name="address" id="address">
+        </div>
+    </form>
+
+    <button class = "SubmitButton" onclick="createAccount()">Create Account</button>
+
+    <!--Include link-->
+    <p class = UrlLink><a href="login.html">Log in</a></p>
+
+    <script>
+        function createAccount()
+        {
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var address = document.getElementById("address").value;
+            var Params = "?Email=" + email + "&Password=" + password + "&Address=" + address + "&Admin=true";
+
+                var URL_base = "http://localhost:8080/";
+                var XHR = new XMLHttpRequest();
+                XHR.open("PUT", URL_base + "/UserCreate" + Params, true);
+                XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                //alert(URL_base + "Users/createUser" + Params);
+
+                XHR.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        alert("Account created");
+                        //alert(JSON.stringify(UserJSON));
+                    } else if (this.readyState == 4) {
+                        alert("Unspecified Error");
+                    }
+                }
+
+                XHR.send(JSON.stringify(UserJSON));
+            }
+            else
+            {
+                alert("Passwords do not match")
+            }
+
+        }
+
+
+    </script>
+
+</div>
+</body>
+</html>

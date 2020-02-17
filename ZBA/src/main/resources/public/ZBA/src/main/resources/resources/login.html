@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+
+<meta name="description" content="">
+<meta name="generator" content="Grapedrop">
+
+<!-- Apple Stuff -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<!-- Google / Search Engine Tags -->
+<meta itemprop="description" content="">
+<meta itemprop="image" content="">
+
+<!-- Facebook Meta Tags -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="">
+<meta property="og:description" content="">
+<meta property="og:image" content="">
+<meta property="og:url" content="http://bc01525.grapedrop.com">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" type="image/png" href="images/favicon.png">
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lory.js/2.2.0/lory.min.js"></script>
+
+        
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"><link rel="stylesheet" href="styles/base.css">
+                <link rel="stylesheet" href="styles/index-style.css">
+            </head>
+
+    <body>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden;
+            }
+        </style>
+        <section id="i3eh" class="gpd-section">
+			<div id="iyyv" class="gpd-container">
+				<div id="ix68" class="gpd-text">
+					<div>
+						LOG IN
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="i4oh" class="gpd-section">
+			<div id="ixrc" class="gpd-container">
+				<form method="post" id="iipw" class="form">
+					<div id="iwfbf" class="form-group">
+						<button type="submit" href="index.html" id="i71u7" class="button">
+							Sign up
+						</button>
+					</div>
+					<div id="error" class="gpd-text">
+					
+					</div>
+					<div id="i7op" class="form-group">
+						<label id="i34s" class="label">
+							Email:
+						</label>
+						<input placeholder="Email" name="usernameField" id="email" class="input"/>
+					</div>
+					<div id="ifpdk" class="form-group">
+						<label id="i4fsl" class="label">
+							Password
+						</label>
+						<input type="password" placeholder="Password" name="Password" id="password" class="input"/>
+					</div>
+					<button type="submit" id="irr6g" onclick= "Login()" class="button">
+						Login
+					</button>
+					<div id="i4me1" class="form-group">
+						<button type="submit" id="iu8fm" class="button">
+							Forgot Login
+						</button>
+					</div>
+					<div data-form-state="success" id="ieius" class="state-success">
+						Thanks! We received your request
+					</div>
+					<div data-form-state="error" id="iu7vy" class="state-error">
+						An error occurred on processing your request, try again!
+					</div>
+				</form>
+			</div>
+		</section>
+                
+
+		<style>
+		a.page-brand-badge {
+        border-radius: 3px !important;
+        background-color: white !important;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.1);
+        padding: 5px 7px !important;
+        font-family: Helvetica, sans-serif !important;
+        font-size: 12px !important;
+        text-decoration: none !important;
+        color: #555 !important;
+        transition: box-shadow 0.25s !important;
+		}
+		a.page-brand-badge:hover {
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.1);
+		}
+
+		</style>
+<a href="https://grapedrop.com" target="_blank" class="page-brand-badge"
+    style="bottom: 10px !important; left: 10px !important; display: block !important; opacity: 1 !important; visibility: visible !important; position: fixed !important;">
+    <svg class="logo-circ" viewBox="0 0 500 500" version="1.1" xmlns="http://www.w3.org/2000/svg" style="width:13px; height:13px; vertical-align: middle; margin-right: 3px; margin-top: -2px;">
+            <defs>
+                <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-2">
+                    <stop stop-color="#EAB3D5" offset="0%"></stop>
+                    <stop stop-color="#D06E9A" offset="100%"></stop>
+                </linearGradient>
+            </defs>
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <g>
+                    <circle fill="url(#linearGradient-2)" cx="251" cy="251" r="250"></circle>
+                    <path d="M244.664082,104.558858 L162.460627,248.205767 C145.186418,278.574619 143.852224,317.189676 162.460627,349.706818 C190.433829,398.588565 252.659,415.493783 301.444357,387.464755 C350.229714,359.436081 367.101474,297.087868 339.127919,248.205413 L256.924464,104.558858 C254.209082,99.813714 247.379111,99.813714 244.664082,104.558858 Z" fill="#FFFFFF" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </svg>
+        Made with Grapedrop
+</a>
+        
+        <script async src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+    var formStateName = 'data-form-state';
+    var formStateEls = $('[' + formStateName + ']');
+    formStateEls.hide();
+    $('form').submit(function(e) {
+        e.preventDefault();
+        var form = $(this);
+        var action = (this.getAttribute('action') || '').trim();
+        var formData = new FormData(this);
+        var chkSelected = {};
+        var name = this.getAttribute('name');
+        name && formData.append('__name', name);
+
+        // Init checkbox and radio if still empty
+        form.find('[type=radio], [type=checkbox]').each(function(item) {
+            var chkName = this.name;
+            if (this.checked) {
+                chkSelected[chkName] = 1;
+                return;
+            }
+            chkSelected[chkName] = 0;
+        });
+
+        for (var chk in chkSelected) {
+            if (!chkSelected[chk]) {
+                formData.append(chk, '');
+            }
+        }
+
+        if (!action) {
+            action = "//grapedrop.com/form-collector/bc01525ff4c24afcb51face6d4697e3c";
+        }
+
+        $.ajax({
+            url: action,
+            method: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+        }).done(function(data) {
+            formStateEls.hide();
+            form.find('> *').fadeOut();
+            form.find('[' + formStateName + '=success]').stop(1).fadeIn();//.delay(3000).fadeOut();
+        }).fail(function(data) {
+            formStateEls.hide();
+            form.find('[' + formStateName + '=error]').stop(1).fadeIn().delay(3000).fadeOut();
+        });
+    });
+
+</script>
+<script>
+        function Login()
+        {
+        	alert("Here")
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var token;
+
+
+            var Params = "?Email=" + email + "&Password=" + password;
+            var URL_base = "http://localhost:8080/";
+            var XHR = new XMLHttpRequest();
+            XHR.open("GET", URL_base + "Login/" + Params, true);
+            XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+
+            XHR.onreadystatechange = function () {
+                sessionKey = this.responseText;
+
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    if(sessionKey.localeCompare("") == 0) {
+                    	document.getElementById("alert").setText("Username and Password not found");
+                    }
+                    else
+                    {
+                    	alert("Logged in");
+                        sessionStorage.setItem("sessionKey",sessionKey);
+                        alert(sessionStorage.getItem("sessionKey"));
+                        //window.location.href = "http://example.com/new_url";
+                    }
+                }
+            }
+            XHR.send();
+        }
+    </script>
+
+        </body>
+</html>
