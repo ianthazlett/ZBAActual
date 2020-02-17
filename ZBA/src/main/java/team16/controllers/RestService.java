@@ -31,7 +31,7 @@ class RestService {
 	@Autowired
 	UserModel user;
     
-    @GetMapping("/UserLogin")
+    @GetMapping("/Login")
     public String login (@RequestParam("Email") String email, @RequestParam("Password") String password)
     {
     	try

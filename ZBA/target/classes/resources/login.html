@@ -188,6 +188,7 @@
 <script>
         function Login()
         {
+        	alert("Here")
             var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
             var token;
@@ -196,7 +197,7 @@
             var Params = "?Email=" + email + "&Password=" + password;
             var URL_base = "http://localhost:8080/";
             var XHR = new XMLHttpRequest();
-            XHR.open("GET", URL_base + "/Login" + Params, true);
+            XHR.open("GET", URL_base + "Login/" + Params, true);
             XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
 

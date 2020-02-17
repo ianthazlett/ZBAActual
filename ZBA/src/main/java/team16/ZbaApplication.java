@@ -38,16 +38,16 @@ public class ZbaApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 	
-		Object[] params = {"a@a.a", "aaa", "a a St.", "false"};
+		Object[] params = {"jimothy@gmail.com", "admin", "a a St.", "false"};
 		int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.BOOLEAN};
 		jdbcTemplate.update("INSERT INTO users(email, password, address, admin) VALUES(?,?,?,?)", params, types);	
 		
-		UserModel loginUser = (UserModel) jdbcTemplate.queryForObject(
+		/*UserModel loginUser = (UserModel) jdbcTemplate.queryForObject(
                 "SELECT address FROM users " + "WHERE email = ?" + "AND password = ?",
-                new Object[]{"a@a.a", "aaa"},
+                new Object[]{"jimothy@gmail.com", "admin"},
                 new BeanPropertyRowMapper<UserModel>(UserModel.class));
 		
-		System.out.println(loginUser.getAddress());
+		System.out.println(loginUser.getAddress());*/
 		
 	}
 
