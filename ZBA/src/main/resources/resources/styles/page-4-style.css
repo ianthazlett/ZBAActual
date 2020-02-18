@@ -1,1 +1,90 @@
-* { box-sizing: border-box; } body {margin: 0;}#i854{font-family:Arial Black, Gadget, sans-serif;font-size:64px;}#i1he{margin:0 0 0;order:0;text-align:right;align-self:baseline;}#i4j4{color:black;white-space:nowrap;}#i1c8{align-self:flex-start;}#i5wab{display:none;}#imrh9{display:none;}#i9v94{background-color:#ff0074;}#ieh9{padding:0 20px 0 20px;}.tab{text-decoration:none;color:inherit;padding:7px 14px;transition:opacity 0.3s;display:inline-block;border-radius:3px;margin-right:10px;}.tab.tab-active{background-color:#0d94e6;color:white;}.tab-content{padding:6px 12px;min-height:100px;animation:fadeEffect 1s;}#izgch{padding:0 20px 0 20px;}#igw0n{color:#000000;background-color:#65dc6b;}#ivprv{display:none;}#ivz0r{display:none;}#ip8d2{padding:0 20px 0 20px;}#i00uo{color:#000000;background-color:#ff0000;font-family:Arial Black, Gadget, sans-serif;}#iip6t{display:none;}#i3opk{display:none;}#i7is3{padding:0 20px 0 20px;}#iynqi{color:#000000;background-color:#ff0000;font-family:Arial Black, Gadget, sans-serif;}#ivea6{display:none;}#izr0n{display:none;}#i7a7i{padding:0 20px 0 20px;}#ib8at{color:#000000;background-color:#ff0000;font-family:Arial Black, Gadget, sans-serif;}@keyframes fadeEffect{from{opacity:0;}to{opacity:1;}}
+*{
+	box-sizing: border-box; 
+	} 
+body {
+	margin: 0;
+	}
+#idvb{
+	
+	}
+#iaks{
+
+	}
+#i854{
+	font-family:Arial Black, Gadget, sans-serif;font-size:64px;
+	}
+#i1he{
+	margin:0 0 0;order:0;text-align:right;align-self:baseline;
+	}
+#i4j4{
+	color:black;white-space:nowrap;
+	}
+#i1c8{
+	align-self:flex-start;
+	}
+#i5wab{
+	display:none;
+	}
+#imrh9{
+	display:none;
+	}
+#i9v94{
+	background-color:#ff0074;
+	}
+#ieh9{
+	padding:0 20px 0 20px;
+	}
+.tab{
+	text-decoration:none;color:inherit;padding:7px 14px;transition:opacity 0.3s;display:inline-block;border-radius:3px;margin-right:10px;
+	}
+.tab.tab-active{
+	background-color:#0d94e6;color:white;
+	}
+.tab-content{
+	padding:6px 12px;min-height:100px;animation:fadeEffect 1s;
+	}
+#izgch{
+	padding:0 20px 0 20px;
+	}
+#igw0n{
+	color:#000000;background-color:#65dc6b;
+	}
+#ivprv{
+	display:none;
+	}
+#ivz0r{
+	display:none;
+	}
+#ip8d2{
+	padding:0 20px 0 20px;
+	}
+#i00uo{
+	color:#000000;background-color:#ff0000;font-family:Arial Black, Gadget, sans-serif;
+	}
+#iip6t{
+	display:none;
+	}
+#i3opk{
+	display:none;
+	}
+#i7is3{
+	padding:0 20px 0 20px;
+	}
+#iynqi{
+	color:#000000;background-color:#ff0000;font-family:Arial Black, Gadget, sans-serif;
+	}
+#ivea6{
+	display:none;
+	}
+#izr0n{
+	display:none;
+	}
+#i7a7i{
+	padding:0 20px 0 20px;
+	}
+#ib8at{
+	color:#000000;background-color:#ff0000;font-family:Arial Black, Gadget, sans-serif;
+	}
+@keyframes fadeEffect{
+	from{opacity:0;}to{opacity:1;}
+	}

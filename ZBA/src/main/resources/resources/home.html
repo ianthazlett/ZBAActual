@@ -27,25 +27,278 @@
 <!-- Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
 
-    <link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="icon" type="image/png" href="images/favicon.png">
         
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/lory.js/2.2.0/lory.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lory.js/2.2.0/lory.min.js"></script>
 
         
-                    <link rel="stylesheet" href="styles/base.css">
-                <link rel="stylesheet" href="styles/page-4-style.css">
-            </head>
-
-    <body>
-        <style>
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/page-4-style.css">
+<link rel="stylesheet" href="styles/Map.css">
+</head>
+<body>
+	<style>
             body {
                 margin: 0;
                 padding: 0;
                 overflow-x: hidden;
             }
         </style>
-                    <section id="idvb" class="gpd-section"><div id="iaks" class="gpd-container"><div id="i854" class="gpd-text">HOME</div></div><div id="isdp" class="gpd-container"><div id="ih55" class="gdp-row"><div id="i1he" class="cell"><img id="i4j4" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImZpbGw6IHJnYmEoMCwwLDAsMC4xNSk7IHRyYW5zZm9ybTogc2NhbGUoMC43NSkiPgogICAgICAgIDxwYXRoIGQ9Ik04LjUgMTMuNWwyLjUgMyAzLjUtNC41IDQuNSA2SDVtMTYgMVY1YTIgMiAwIDAgMC0yLTJINWMtMS4xIDAtMiAuOS0yIDJ2MTRjMCAxLjEuOSAyIDIgMmgxNGMxLjEgMCAyLS45IDItMnoiPjwvcGF0aD4KICAgICAgPC9zdmc+"/></div><div id="i1c8" class="cell"><div id="iec6" class="gpd-text">USERNAME</div><form method="post" id="ieh9" class="form"><button type="submit" id="i9v94" class="button">Signout</button><div data-form-state="success" id="i5wab" class="state-success">Thanks! We received your request</div><div data-form-state="error" id="imrh9" class="state-error">An error occurred on processing your request, try again!</div></form></div></div></div></section><div data-tabs="1" id="izkj"><form method="post" id="izgch" class="form"><button type="submit" id="igw0n" class="button">New Zone</button><div data-form-state="success" id="inm3i" class="state-success">Thanks! We received your request</div><div data-form-state="error" id="i1cea" class="state-error">An error occurred on processing your request, try again!</div></form><nav data-tab-container="1" id="irg2" class="tab-container"><a href="#tab1" data-tab="1" id="if75" class="tab">Zone 1</a><a href="#tab2" data-tab="1" id="itr9l" class="tab">Zone 2</a><a href="#tab3" data-tab="1" id="iz1sg" class="tab">Zone 3</a></nav><div id="tab1" data-tab-content="1" class="tab-content"><div id="iyk2" class="gdp-row"><div id="i02m" class="cell"><div id="iriz" class="gpd-text">Map</div></div><div id="iby5" class="cell"><div id="i75m" class="gpd-text">Active Alerts</div></div><div class="cell"><div id="indg" class="gpd-text">Options</div><form method="post" id="ip8d2" class="form"><button type="submit" id="i00uo" class="button">Delete Zone</button><div data-form-state="success" id="ivprv" class="state-success">Thanks! We received your request</div><div data-form-state="error" id="ivz0r" class="state-error">An error occurred on processing your request, try again!</div></form></div></div></div><div id="tab2" data-tab-content="1" class="tab-content"><div id="ihodt" class="gdp-row"><div class="cell"><div class="gpd-text">Map</div></div><div class="cell"><div class="gpd-text">Active Alerts</div></div><div class="cell"><div class="gpd-text">Options</div><form method="post" id="i7is3" class="form"><button type="submit" id="iynqi" class="button">Delete Zone</button><div data-form-state="success" id="iip6t" class="state-success">Thanks! We received your request</div><div data-form-state="error" id="i3opk" class="state-error">An error occurred on processing your request, try again!</div></form></div></div></div><div id="tab3" data-tab-content="1" class="tab-content"><div id="if12j" class="gdp-row"><div class="cell"><div class="gpd-text">Map</div></div><div class="cell"><div class="gpd-text">Active Alerts</div></div><div class="cell"><div class="gpd-text">Options</div><form method="post" id="i7a7i" class="form"><button type="submit" id="ib8at" class="button">Delete Zone</button><div data-form-state="success" id="ivea6" class="state-success">Thanks! We received your request</div><div data-form-state="error" id="izr0n" class="state-error">An error occurred on processing your request, try again!</div></form></div></div></div></div><script>var items = document.querySelectorAll('#izkj');
+        
+        <section id="idvb" class="gpd-section">
+        	<div id="iaks" class="gpd-container">
+        		<div id="i854" class="gpd-text">
+        			HOME
+        		</div>
+        	</div>
+        	<div id="isdp" class="gpd-container">
+        		<div id="ih55" class="gdp-row">
+        			<div id="i1he" class="cell">
+        			<!--
+        				<img id="i4j4" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImZpbGw6IHJnYmEoMCwwLDAsMC4xNSk7IHRyYW5zZm9ybTogc2NhbGUoMC43NSkiPgogICAgICAgIDxwYXRoIGQ9Ik04LjUgMTMuNWwyLjUgMyAzLjUtNC41IDQuNSA2SDVtMTYgMVY1YTIgMiAwIDAgMC0yLTJINWMtMS4xIDAtMiAuOS0yIDJ2MTRjMCAxLjEuOSAyIDIgMmgxNGMxLjEgMCAyLS45IDItMnoiPjwvcGF0aD4KICAgICAgPC9zdmc+"/>
+        			-->
+        			</div>
+        			<div id="i1c8" class="cell">
+        				<div id="iec6" class="gpd-text">
+        					USERNAME
+        				</div>
+        				<form method="post" id="ieh9" class="form">
+        					<button type="submit" id="i9v94" class="button">
+        						Signout
+        					</button>
+        					<div data-form-state="success" id="i5wab" class="state-success">
+        						Thanks! We received your request
+        					</div>
+        					<div data-form-state="error" id="imrh9" class="state-error">
+        						An error occurred on processing your request, try again!
+        					</div>
+        				</form>
+        			</div>
+        		</div>
+        	</div>
+        </section>
+        <div data-tabs="1" id="izkj">
+        	<form method="post" id="izgch" class="form">
+        		<button type="submit" id="igw0n" class="button">
+        			New Zone
+        		</button>
+        		<div data-form-state="success" id="inm3i" class="state-success">
+        			Thanks! We received your request
+        		</div>
+        		<div data-form-state="error" id="i1cea" class="state-error">
+        			An error occurred on processing your request, try again!
+        		</div>
+        	</form>
+        	<nav data-tab-container="1" id="irg2" class="tab-container">
+        		<a href="#tab1" data-tab="1" id="if75" class="tab">
+        			Zone 1
+        		</a>
+        		<a href="#tab2" data-tab="1" id="itr9l" class="tab">
+        			Zone 2
+        		</a>
+        		<a href="#tab3" data-tab="1" id="iz1sg" class="tab">
+        			Zone 3
+        		</a>
+        	</nav>
+        	<div id="tab1" data-tab-content="1" class="tab-content">
+        		<div id="iyk2" class="gdp-row">
+        			<div id="i02m" class="cell">
+						<div id="iriz">
+							<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+								<div id="map"></div>
+							  		<script>
+							    		// This example requires the Drawing library. Include the libraries=drawing
+							    		// parameter when you first load the API. For example:
+							    		// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=drawing">
+							
+									    function initMap() {
+									    	var infowindow = new google.maps.InfoWindow();
+									      var map = new google.maps.Map(document.getElementById('map'), {
+									        center: {lat: -34.397, lng: 150.644},
+									        zoom: 8
+									      });
+									      
+									      // Create the search box and link it to the UI element.
+									      var input = document.getElementById('pac-input');
+									      var searchBox = new google.maps.places.SearchBox(input);
+									      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+									
+									      // Bias the SearchBox results towards current map's viewport.
+									      map.addListener('bounds_changed', function() {
+									        searchBox.setBounds(map.getBounds());
+									      });
+							
+									      var markers = [];
+									      // Listen for the event fired when the user selects a prediction and retrieve
+									      // more details for that place.
+									      searchBox.addListener('places_changed', function() {
+									        var places = searchBox.getPlaces();
+									
+									        if (places.length == 0) {
+									          return;
+									        }
+									
+									        // Clear out the old markers.
+									        markers.forEach(function(marker) {
+									          marker.setMap(null);
+									        });
+									        markers = [];
+									
+									        // For each place, get the icon, name and location.
+									        var bounds = new google.maps.LatLngBounds();
+									        places.forEach(function(place) {
+									          if (!place.geometry) {
+									            console.log("Returned place contains no geometry");
+									            return;
+									          }
+									          var icon = {
+									            url: place.icon,
+									            size: new google.maps.Size(71, 71),
+									            origin: new google.maps.Point(0, 0),
+									            anchor: new google.maps.Point(17, 34),
+									            scaledSize: new google.maps.Size(25, 25)
+									          };
+									
+									          // Create a marker for each place.
+									          markers.push(new google.maps.Marker({
+									            map: map,
+									            icon: icon,
+									            title: place.name,
+									            position: place.geometry.location
+									          }));
+									
+									          if (place.geometry.viewport) {
+									            // Only geocodes have viewport.
+									            bounds.union(place.geometry.viewport);
+									          } else {
+									            bounds.extend(place.geometry.location);
+									          }
+									        });
+									        map.fitBounds(bounds);
+									      });
+									      
+									      var drawingManager = new google.maps.drawing.DrawingManager({
+									        drawingControl: true,
+									        drawingControlOptions: {
+									          position: google.maps.ControlPosition.TOP_RIGHT,
+									          drawingModes: ['circle', 'polygon']
+									        },
+									        markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
+									        circleOptions: {
+									          clickable: true,
+									          editable: true,
+									          zIndex: 1
+									        },
+									        polygonOptions: {
+									          clickable: true,
+									          editable: true,
+									          zIndex: 1
+									        }
+									      });
+									      drawingManager.setMap(map);
+									      
+									     	google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
+									      drawingManager.setOptions({
+									    	drawingControl: false});
+									      document.getElementById('info').innerHTML += "polygon points:" + "<br>";
+									      for (var i = 0; i < polygon.getPath().getLength(); i++) {
+									         document.getElementById('info').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + "<br>";
+									      }
+									      drawingManager.setOptions({drawingMode: null});
+									  });
+									  
+									  google.maps.event.addListener(drawingManager, 'circlecomplete', function (circle) 
+									  {
+									  		if (circle.getRadius() > 10000) 
+									      	{
+									      		circle.setRadius(10000);
+									        }
+									  
+									      drawingManager.setOptions({drawingControl: false});
+									      
+									      document.getElementById('info').innerHTML += "circle point: " + circle.getCenter() + "<br>" + "circle radius: " + circle.getRadius();
+									      
+									      drawingManager.setOptions({drawingMode: null});
+									      
+									      google.maps.event.addListener(circle,'radius_changed',function()
+									      {
+									  			if (this.getRadius() > 10000) 
+									      	{
+									      		this.setRadius(10000);
+									        }
+									      });
+									});
+									    }
+									</script>
+							    	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFe5Q1WDjaCGCTVfdkrC4uMOroI2Y3-ys&libraries=drawing,places&callback=initMap" async defer>
+							    	</script>
+							  		<div id="info">
+							  		</div>
+        						</div>
+        					</div>
+        					<div id="iby5" class="cell">
+        						<div id="i75m" class="gpd-text">
+        							Active Alerts
+        						</div>
+        					</div>
+        					<div class="cell">
+        						<div id="indg" class="gpd-text">
+        							Options
+	        					</div>
+	        					<form method="post" id="ip8d2" class="form">
+	        						<button type="submit" id="i00uo" class="button">
+	        							Delete Zone
+	        						</button>
+	        						<div data-form-state="success" id="ivprv" class="state-success">
+	        							Thanks! We received your request
+	        						</div>
+	        						<div data-form-state="error" id="ivz0r" class="state-error">
+	        							An error occurred on processing your request, try again!
+	        						</div>
+			        			</form>
+			        		</div>
+		        		</div>
+		        	</div>
+		        	<div id="tab2" data-tab-content="1" class="tab-content">
+		        		<div id="ihodt" class="gdp-row">
+		        			<div class="cell">
+		        				<div class="gpd-text">
+		        					Map
+		        				</div>
+		        			</div>
+		        			<div class="cell">
+		        				<div class="gpd-text">
+		        					Active Alerts
+		        				</div>
+		        			</div>
+		        			<div class="cell">
+		        				<div class="gpd-text">
+		        					Options
+		        				</div>
+		        				<form method="post" id="i7is3" class="form">
+		        					<button type="submit" id="iynqi" class="button">
+		        						Delete Zone
+		        					</button>
+		        					<div data-form-state="success" id="iip6t" class="state-success">
+		        						Thanks! We received your request
+		        					</div>
+		        					<div data-form-state="error" id="i3opk" class="state-error">
+		        						An error occurred on processing your request, try again!
+		        					</div>
+		        				</form>
+		        			</div>
+		        		</div>
+		        	</div>
+		        	<div id="tab3" data-tab-content="1" class="tab-content">
+		        		<div id="if12j" class="gdp-row">
+		        			<div class="cell">
+		        				<div class="gpd-text">
+		        					Map
+		        				</div>
+		        			</div>
+		        			<div class="cell">
+		        			<div class="gpd-text">Active Alerts</div></div><div class="cell"><div class="gpd-text">Options</div><form method="post" id="i7a7i" class="form"><button type="submit" id="ib8at" class="button">Delete Zone</button><div data-form-state="success" id="ivea6" class="state-success">Thanks! We received your request</div><div data-form-state="error" id="izr0n" class="state-error">An error occurred on processing your request, try again!</div></form></div></div></div></div><script>var items = document.querySelectorAll('#izkj');
         for (var i = 0, len = items.length; i < len; i++) {
           (function(){var t,e=this,n="[data-tab]",r=document.body,o=r.matchesSelector||r.webkitMatchesSelector||r.mozMatchesSelector||r.msMatchesSelector,i=function(r){var o=e.querySelectorAll(n)||[];for(t=0;t<o.length;t++){var i=o[t],a=i.className.replace("tab-active","").trim();i.className=a}!function(){var n=e.querySelectorAll("[data-tab-content]")||[];for(t=0;t<n.length;t++)n[t].style.display="none"}(),r.className+=" tab-active";var s=r.getAttribute("href"),c=e.querySelector(s);c&&(c.style.display="")},a=e.querySelector(".tab-active"+n);(a=a||e.querySelector(n))&&i(a),e.addEventListener("click",function(t){var e=t.target;o.call(e,n)&&i(e)})}.bind(items[i]))();
         }</script>
