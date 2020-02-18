@@ -31,7 +31,7 @@ class RestService {
 	@Autowired
 	UserModel user;
     
-    @GetMapping("/UserLogin")
+    @GetMapping("/Login")
     public String login (@RequestParam("Email") String email, @RequestParam("Password") String password)
     {
     	try
@@ -61,11 +61,11 @@ class RestService {
     }
     
     @PostMapping("/UserCreate")
-    public void accountCreation (@RequestParam("Email") String email, @RequestParam("Password") String password, @RequestParam("Address") String address, @RequestParam("Admin") boolean admin)
+    public void accountCreation (@RequestParam("Email") String email, @RequestParam("Password") String password, @RequestParam("Address") String address)
     {
     	jdbcTemplate.update(
                 "insert into users (email, password, address, admin) values(?,?,?,?)",
-                email, password, address, admin);
+                email, password, address, false);
     }
 
     @PostMapping("/CreateCircleZone")

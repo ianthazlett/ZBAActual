@@ -58,8 +58,8 @@
 			<div id="ixrc" class="gpd-container">
 				<form method="post" id="iipw" class="form">
 					<div id="iwfbf" class="form-group">
-						<button type="submit" href="index.html" id="i71u7" class="button">
-							Sign up
+						<button type="submit" href="index.html" id="i71u7" onclick= "toSignup()" class="button">
+							<p class = UrlLink><a href="signup.html">Sign Up</a></p>
 						</button>
 					</div>
 					<div id="error" class="gpd-text">
@@ -93,8 +93,10 @@
 					</div>
 				</form>
 			</div>
+			
 		</section>
-                
+        
+               
 
 		<style>
 		a.page-brand-badge {
@@ -188,6 +190,7 @@
 <script>
         function Login()
         {
+        	alert("Here")
             var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
             var token;
@@ -196,7 +199,7 @@
             var Params = "?Email=" + email + "&Password=" + password;
             var URL_base = "http://localhost:8080/";
             var XHR = new XMLHttpRequest();
-            XHR.open("GET", URL_base + "/Login" + Params, true);
+            XHR.open("GET", URL_base + "Login/" + Params, true);
             XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
 
@@ -219,7 +222,13 @@
             }
             XHR.send();
         }
-    </script>
+        
+        function toSignup()
+        {
+        	location.replace("signup.html");
+        }
+   </script>
+   
 
         </body>
 </html>
