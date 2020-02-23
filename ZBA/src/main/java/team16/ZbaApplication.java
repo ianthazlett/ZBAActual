@@ -40,15 +40,8 @@ public class ZbaApplication implements CommandLineRunner{
 	
 		Object[] params = {"jimothy@gmail.com", "admin", "a a St.", "false"};
 		int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.BOOLEAN};
-		jdbcTemplate.update("INSERT INTO users(email, password, address, admin) VALUES(?,?,?,?)", params, types);	
-		
-		/*UserModel loginUser = (UserModel) jdbcTemplate.queryForObject(
-                "SELECT address FROM users " + "WHERE email = ?" + "AND password = ?",
-                new Object[]{"jimothy@gmail.com", "admin"},
-                new BeanPropertyRowMapper<UserModel>(UserModel.class));
-		
-		System.out.println(loginUser.getAddress());*/
-		
+		int test = jdbcTemplate.update("INSERT INTO users(email, password, address, admin) VALUES(?,?,?,?)", params, types);	
+		System.out.print(test);
 	}
 
 }

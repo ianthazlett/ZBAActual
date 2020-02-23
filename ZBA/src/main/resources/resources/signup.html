@@ -202,14 +202,12 @@
                     if (this.readyState == 4 && this.status == 200)
                     {
                         if(sessionKey.localeCompare("") == 0) {
-                        	document.getElementById("alert").setText("Username and Password not found");
+                        	document.getElementById("alert").setText("Account creation failed. Account already exists.");
                         }
                         else
                         {
-                        	alert("Logged in");
-                            sessionStorage.setItem("sessionKey",sessionKey);
-                            alert(sessionStorage.getItem("sessionKey"));
-                            //window.location.href = "http://example.com/new_url";
+                        	alert("Account created");
+                            window.location.href = "http://example.com/login";
                         }
                     }
                 }

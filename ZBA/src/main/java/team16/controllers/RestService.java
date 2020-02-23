@@ -61,11 +61,26 @@ class RestService {
     }
     
     @PostMapping("/UserCreate")
-    public void accountCreation (@RequestParam("Email") String email, @RequestParam("Password") String password, @RequestParam("Address") String address)
+    public String accountCreation (@RequestParam("Email") String email, @RequestParam("Password") String password, @RequestParam("Address") String address)
     {
-    	jdbcTemplate.update(
+    	
+    	try
+    	{	
+    	UserModel loginUser = (UserModel) jdbcTemplate.queryForObject(
+                "SELECT address FROM users " + "WHERE email = ?" + "AND password = ?",
+                new Object[]{email, password},
+                new BeanPropertyRowMapper<UserModel>(UserModel.class));
+    	
+    	return "";
+    	}
+    	catch (EmptyResultDataAccessException e) 
+    	{
+    		jdbcTemplate.update(
                 "insert into users (email, password, address, admin) values(?,?,?,?)",
                 email, password, address, false);
+    		return "Complete";
+    	}
+    
     }
 
     @PostMapping("/CreateCircleZone")
@@ -79,12 +94,47 @@ class RestService {
     }
     
     @PostMapping("/CreatePolygonZone")
-    int createPolygonZone(@RequestParam double[][] points)
+    String createPolygonZone(@RequestParam String key, @RequestBody String points)
     {
-    	int temp = 0;
     	//Call createPolygon DB function, assign result to temp
     	//If zone created, reopen page to display new zone
     	//else warning and don't change page to avoid deleting zone
-    	return temp;
+    	String pointsString = "";
+    	Integer id = Session.get(key);
+    	if(id == null)
+    	{
+    		return "";
+    	}
+    	else
+    	{
+    		for(int i = 0; i < points.length(); i++)
+    		{
+    			String temp = "";
+    		}
+    		
+    		jdbcTemplate.update("INSERT INTO zones (user_id, zone_loc) VALUES (?,ST_GeomFromText('POLYGON((?))',4326))", id, pointsString);
+    		return "";
+    	}
+    }
+    
+    @GetMapping("/SessionCheck")
+    String SessionCheck(@RequestParam String Key)
+    {
+    	String ret = "";
+    	Integer id = Session.get(Key);
+    	if(id == null)
+    	{
+    		return "";
+    	}
+    	else
+    	{
+    		UserModel loginUser = (UserModel) jdbcTemplate.queryForObject(
+                    "SELECT address FROM users " + "WHERE user_id = ?",
+                    new Object[]{id},
+                    new BeanPropertyRowMapper<UserModel>(UserModel.class));
+    		
+    		
+    		return ret;
+    	}
     }
 }

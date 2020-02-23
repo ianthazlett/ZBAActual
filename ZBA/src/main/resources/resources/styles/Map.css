@@ -1,8 +1,8 @@
 @charset "ISO-8859-1";
 
 html, body, #map {
-	height: 50vh;
-	width: 50vw;
+	height: 85vh;
+	width: 85vw;
 	margin: 0; 
     padding: 0;
 }/* Optional: Makes the sample page fill the window. */

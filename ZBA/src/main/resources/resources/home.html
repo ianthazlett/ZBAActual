@@ -38,6 +38,43 @@
 <link rel="stylesheet" href="styles/Map.css">
 </head>
 <body>
+
+<script>
+        function SessionCheck()
+        {
+            var key = sessionStorage.getItem("sessionKey");
+            if(key === null)
+            {
+            	alert("Invalid session key, please log in.")
+            	window.location.href = "http://localhost:8080/login";
+            }
+            var token;
+
+
+            var Params = "?Key=" + key;
+            var URL_base = "http://localhost:8080/";
+            var XHR = new XMLHttpRequest();
+            XHR.open("GET", URL_base + "SessionCheck/" + Params, true);
+            XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+
+            XHR.onreadystatechange = function () {
+                sessionResponse = this.responseText;
+
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    if(sessionResponse.localeCompare("") == 0) {
+                    	alert("Invalid session key, please log in.")
+                    	window.location.href = "http://localhost:8080/login";
+                    }
+                    else
+                    {}
+                }
+            }
+            XHR.send();
+        }
+   </script>
+
 	<style>
             body {
                 margin: 0;
@@ -94,15 +131,10 @@
         		<a href="#tab1" data-tab="1" id="if75" class="tab">
         			Zone 1
         		</a>
-        		<a href="#tab2" data-tab="1" id="itr9l" class="tab">
-        			Zone 2
-        		</a>
-        		<a href="#tab3" data-tab="1" id="iz1sg" class="tab">
-        			Zone 3
-        		</a>
         	</nav>
         	<div id="tab1" data-tab-content="1" class="tab-content">
         		<div id="iyk2" class="gdp-row">
+        		<ul>
         			<div id="i02m" class="cell">
 						<div id="iriz">
 							<input id="pac-input" class="controls" type="text" placeholder="Search Box">
@@ -247,8 +279,11 @@
         							Options
 	        					</div>
 	        					<form method="post" id="ip8d2" class="form">
-	        						<button type="submit" id="i00uo" class="button">
+	        						<button type="submit" id="DeleteZone" class="button">
 	        							Delete Zone
+	        						</button>
+	        						<button type="submit" id="UpdateZone" class="button">
+	        							Update Zone
 	        						</button>
 	        						<div data-form-state="success" id="ivprv" class="state-success">
 	        							Thanks! We received your request
@@ -258,53 +293,16 @@
 	        						</div>
 			        			</form>
 			        		</div>
+			        		</ul>
 		        		</div>
 		        	</div>
-		        	<div id="tab2" data-tab-content="1" class="tab-content">
-		        		<div id="ihodt" class="gdp-row">
-		        			<div class="cell">
-		        				<div class="gpd-text">
-		        					Map
-		        				</div>
-		        			</div>
-		        			<div class="cell">
-		        				<div class="gpd-text">
-		        					Active Alerts
-		        				</div>
-		        			</div>
-		        			<div class="cell">
-		        				<div class="gpd-text">
-		        					Options
-		        				</div>
-		        				<form method="post" id="i7is3" class="form">
-		        					<button type="submit" id="iynqi" class="button">
-		        						Delete Zone
-		        					</button>
-		        					<div data-form-state="success" id="iip6t" class="state-success">
-		        						Thanks! We received your request
-		        					</div>
-		        					<div data-form-state="error" id="i3opk" class="state-error">
-		        						An error occurred on processing your request, try again!
-		        					</div>
-		        				</form>
-		        			</div>
-		        		</div>
-		        	</div>
-		        	<div id="tab3" data-tab-content="1" class="tab-content">
-		        		<div id="if12j" class="gdp-row">
-		        			<div class="cell">
-		        				<div class="gpd-text">
-		        					Map
-		        				</div>
-		        			</div>
-		        			<div class="cell">
-		        			<div class="gpd-text">Active Alerts</div></div><div class="cell"><div class="gpd-text">Options</div><form method="post" id="i7a7i" class="form"><button type="submit" id="ib8at" class="button">Delete Zone</button><div data-form-state="success" id="ivea6" class="state-success">Thanks! We received your request</div><div data-form-state="error" id="izr0n" class="state-error">An error occurred on processing your request, try again!</div></form></div></div></div></div><script>var items = document.querySelectorAll('#izkj');
-        for (var i = 0, len = items.length; i < len; i++) {
-          (function(){var t,e=this,n="[data-tab]",r=document.body,o=r.matchesSelector||r.webkitMatchesSelector||r.mozMatchesSelector||r.msMatchesSelector,i=function(r){var o=e.querySelectorAll(n)||[];for(t=0;t<o.length;t++){var i=o[t],a=i.className.replace("tab-active","").trim();i.className=a}!function(){var n=e.querySelectorAll("[data-tab-content]")||[];for(t=0;t<n.length;t++)n[t].style.display="none"}(),r.className+=" tab-active";var s=r.getAttribute("href"),c=e.querySelector(s);c&&(c.style.display="")},a=e.querySelector(".tab-active"+n);(a=a||e.querySelector(n))&&i(a),e.addEventListener("click",function(t){var e=t.target;o.call(e,n)&&i(e)})}.bind(items[i]))();
-        }</script>
+				</div>
+				<script>
+					var items = document.querySelectorAll('#izkj');for (var i = 0, len = items.length; i < len; i++) {(function(){var t,e=this,n="[data-tab]",r=document.body,o=r.matchesSelector||r.webkitMatchesSelector||r.mozMatchesSelector||r.msMatchesSelector,i=function(r){var o=e.querySelectorAll(n)||[];for(t=0;t<o.length;t++){var i=o[t],a=i.className.replace("tab-active","").trim();i.className=a}!function(){var n=e.querySelectorAll("[data-tab-content]")||[];for(t=0;t<n.length;t++)n[t].style.display="none"}(),r.className+=" tab-active";var s=r.getAttribute("href"),c=e.querySelector(s);c&&(c.style.display="")},a=e.querySelector(".tab-active"+n);(a=a||e.querySelector(n))&&i(a),e.addEventListener("click",function(t){var e=t.target;o.call(e,n)&&i(e)})}.bind(items[i]))();}
+				</script>
                 
 
-                    <style>
+                <style>
     a.page-brand-badge {
         border-radius: 3px !important;
         background-color: white !important;
