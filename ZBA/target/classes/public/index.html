@@ -1,78 +1,219 @@
+<?php Header("Cache-Control: max-age=3000, must-revalidate"); ?>
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Account Creation</title>
-    <link rel = "stylesheet" href="styles/LoginAndAccountCreationLightCSS.css" type="text/css">
-</head>
-<body>
-<div class="PageContent">
-    <script> alert(sessionStorage.getItem("UserID"))</script>
+<html>
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <!--Find a better name?-->
-    <!--Should link to Homepage-->
-    <h1 id ="WebsiteLogo">Group 16</h1>
-    <h2 id ="CreateAccount">Create Account</h2>
 
-    <form>
-        <div class = "EntryField">
-            Email: <input type="text" name="email" id="email">
-        </div>
+<meta name="description" content="">
+<meta name="generator" content="Grapedrop">
 
-        <div class = "EntryField">
-            Password: <input type="text" name="password" id="password">
-        </div>
+<!-- Apple Stuff -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-        <div class = "EntryField">
-            Confirm Password: <input type="text" name="confirmPassword" id="confirmPassword">
-        </div>
+<!-- Google / Search Engine Tags -->
+<meta itemprop="description" content="">
+<meta itemprop="image" content="">
+
+<!-- Facebook Meta Tags -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="">
+<meta property="og:description" content="">
+<meta property="og:image" content="">
+<meta property="og:url" content="http://67e15a5.grapedrop.com/sdp-login-copy-">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" type="image/png" href="images/favicon.png">
         
-        <div class = "EntryField">
-            Address: <input type="text" name="address" id="address">
-        </div>
-    </form>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lory.js/2.2.0/lory.min.js"></script>
 
-    <button class = "SubmitButton" onclick="createAccount()">Create Account</button>
+        
+                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"><link rel="stylesheet" href="styles/base.css">
+                <link rel="stylesheet" href="styles/sdp-login-copy--style.css">
+            </head>
 
-    <!--Include link-->
-    <p class = UrlLink><a href="login.html">Log in</a></p>
-
-    <script>
-        function createAccount()
-        {
-            var email = document.getElementById("email").value;
-            var password = document.getElementById("password").value;
-            var address = document.getElementById("address").value;
-            var Params = "?Email=" + email + "&Password=" + password + "&Address=" + address + "&Admin=true";
-
-                var URL_base = "http://localhost:8080/";
-                var XHR = new XMLHttpRequest();
-                XHR.open("PUT", URL_base + "/UserCreate" + Params, true);
-                XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-                //alert(URL_base + "Users/createUser" + Params);
-
-                XHR.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        alert("Account created");
-                        //alert(JSON.stringify(UserJSON));
-                    } else if (this.readyState == 4) {
-                        alert("Unspecified Error");
-                    }
-                }
-
-                XHR.send(JSON.stringify(UserJSON));
+    <body>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden;
             }
-            else
-            {
-                alert("Passwords do not match")
-            }
+        </style>
+                    <section id="i3eh" class="gpd-section">
+                    	<div id="iyyv" class="gpd-container">
+                    		<div id="ix68" class="gpd-text">Sign Up<br>
+                    		</div>
+                    	</div>
+                    </section>
+                    <section id="i4oh" class="gpd-section">
+                    	<div id="ixrc" class="gpd-container">
+                    		<form method="post" id="iipw" class="form">
+                  
+                    			<div id="iufbc" class="form-group">
+                    				<label id="isiza" class="label">
+                    					Email
+                    				</label>
+                    				<input type="email" placeholder="email@address.com" name="Email" id="email" class="input"/>
+                    			</div>
+                    			<div id="ifpdk" class="form-group">
+                    				<label id="i4fsl" class="label">
+                    					Password
+                    				</label>
+                    				<input type="password" placeholder="Password" name="Password" id="password" class="input"/>
+                    			</div>
+                    			<div class="form-group">
+                    				<label id="iiv4i" class="label">
+                    					Address
+                    				</label>
+                    				<input type="text" placeholder="123 Main Street, New York, New York" name="Address" id="address" class="input"/>
+                    			</div>
+                    			<button type="submit" id="irr6g" onclick= "Signup()" class="button">
+                    				Submit
+                    			</button>
+                    			<button type="submit" id="loginButton" onclick="location.href='http://localhost:8080/login.html';" class="button">
+                    				Log In
+                    			</button>
+                    			<div data-form-state="success" id="ieius" class="state-success">
+                    				Thanks! We received your request
+                    			</div>
+                    			<div data-form-state="error" id="iu7vy" class="state-error">
+                    				An error occurred on processing your request, try again!
+                    			</div>
+                    		</form>
+                    	</div>
+                    </section>
+                
 
+                    <style>
+    a.page-brand-badge {
+        border-radius: 3px !important;
+        background-color: white !important;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.1);
+        padding: 5px 7px !important;
+        font-family: Helvetica, sans-serif !important;
+        font-size: 12px !important;
+        text-decoration: none !important;
+        color: #555 !important;
+        transition: box-shadow 0.25s !important;
+    }
+    a.page-brand-badge:hover {
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+</style>
+<a href="https://grapedrop.com" target="_blank" class="page-brand-badge"
+    style="bottom: 10px !important; left: 10px !important; display: block !important; opacity: 1 !important; visibility: visible !important; position: fixed !important;">
+    <svg class="logo-circ" viewBox="0 0 500 500" version="1.1" xmlns="http://www.w3.org/2000/svg" style="width:13px; height:13px; vertical-align: middle; margin-right: 3px; margin-top: -2px;">
+            <defs>
+                <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-2">
+                    <stop stop-color="#EAB3D5" offset="0%"></stop>
+                    <stop stop-color="#D06E9A" offset="100%"></stop>
+                </linearGradient>
+            </defs>
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <g>
+                    <circle fill="url(#linearGradient-2)" cx="251" cy="251" r="250"></circle>
+                    <path d="M244.664082,104.558858 L162.460627,248.205767 C145.186418,278.574619 143.852224,317.189676 162.460627,349.706818 C190.433829,398.588565 252.659,415.493783 301.444357,387.464755 C350.229714,359.436081 367.101474,297.087868 339.127919,248.205413 L256.924464,104.558858 C254.209082,99.813714 247.379111,99.813714 244.664082,104.558858 Z" fill="#FFFFFF" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </svg>
+        Made with Grapedrop
+</a>
+        
+        <script async src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+    <script>function loadQl() {quicklink({ ignores:[ /^tel:/g, /^mailto:/g] })}</script>
+    <script async src="https://unpkg.com/quicklink@1.0.1" onload="loadQl()"></script>
+
+<script>
+    var formStateName = 'data-form-state';
+    var formStateEls = $('[' + formStateName + ']');
+    formStateEls.hide();
+    $('form').submit(function(e) {
+        e.preventDefault();
+        var form = $(this);
+        var action = (this.getAttribute('action') || '').trim();
+        var formData = new FormData(this);
+        var chkSelected = {};
+        var name = this.getAttribute('name');
+        name && formData.append('__name', name);
+
+        // Init checkbox and radio if still empty
+        form.find('[type=radio], [type=checkbox]').each(function(item) {
+            var chkName = this.name;
+            if (this.checked) {
+                chkSelected[chkName] = 1;
+                return;
+            }
+            chkSelected[chkName] = 0;
+        });
+
+        for (var chk in chkSelected) {
+            if (!chkSelected[chk]) {
+                formData.append(chk, '');
+            }
         }
 
+        if (!action) {
+            action = "//grapedrop.com/form-collector/906f4fa0d91e4d6d8850822599a6ca04";
+        }
+
+        $.ajax({
+            url: action,
+            method: 'POST',
+            processData: false,
+            contentType: false,
+            data: formData,
+        }).done(function(data) {
+            formStateEls.hide();
+            form.find('> *').fadeOut();
+            form.find('[' + formStateName + '=success]').stop(1).fadeIn();//.delay(3000).fadeOut();
+        }).fail(function(data) {
+            formStateEls.hide();
+            form.find('[' + formStateName + '=error]').stop(1).fadeIn().delay(3000).fadeOut();
+        });
+    });
 
     </script>
+    
+    <script>
+    		function Signup()
+    		{
+    			var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
+                var address = document.getElementById("address").value;
+                var token;
+                
+                var Params = "?Email=" + email + "&Password=" + password + "&Address=" + address;
+                var URL_base = "http://localhost:8080/";
+                var XHR = new XMLHttpRequest();
+                XHR.open("POST", URL_base + "UserCreate/" + Params, true);
+                XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                
+                XHR.onreadystatechange = function () {
+                    sessionKey = this.responseText;
 
-</div>
-</body>
+                    if (this.readyState == 4 && this.status == 200)
+                    {
+                        if(sessionKey.localeCompare("") == 0) {
+                        	document.getElementById("alert").setText("Account creation failed. Account already exists.");
+                        }
+                        else
+                        {
+                        	alert("Account created");
+                            window.location.href = "http://localhost:8080/login.html";
+                        }
+                    }
+                }
+                XHR.send();
+    		}
+    </script>
+        </body>
 </html>

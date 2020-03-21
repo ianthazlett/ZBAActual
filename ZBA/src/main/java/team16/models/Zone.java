@@ -2,25 +2,30 @@ package team16.models;
 
 public class Zone {
 	
-	private int userID;
 	private int zoneID;
-	private String name;
-	public int getUserID() {
-		return userID;
+	private String location;
+	
+	public Zone(int zoneID, String location)
+	{
+		this.zoneID = zoneID;
+		this.location = location;
 	}
-	public void setUserID(int userID) {
-		this.userID = userID;
+	
+	public Zone()
+	{
+		
 	}
+	
 	public int getZoneID() {
 		return zoneID;
 	}
 	public void setZoneID(int zoneID) {
 		this.zoneID = zoneID;
 	}
-	public String getName() {
-		return name;
+	public String getLocation() {
+		return location;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 }

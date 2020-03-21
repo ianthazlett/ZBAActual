@@ -16,12 +16,13 @@ public class UserModel
     public UserModel() {
 	}
 
-    public UserModel(String email, String address, String password, boolean admin) {
+    public UserModel(String email, String address, String password, boolean admin, int ID) {
     	
     	this.password = password;
         this.admin = admin;
         this.email = email;
         this.address = address;
+        this.ID = ID;
     }
 
     public String getEmail() {
