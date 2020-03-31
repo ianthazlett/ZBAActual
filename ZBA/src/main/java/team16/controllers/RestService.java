@@ -98,29 +98,25 @@ class RestService {
     }
 
     @PostMapping("/CreateCircleZone")
-    String createCircleZone(@RequestParam double lng, @RequestParam double lat, @RequestParam int radius, @RequestParam String key)
+    String createCircleZone(@RequestParam String Center, @RequestParam String Radius, @RequestParam String Key)
     {
-    	Integer id = Session.get(key);
+    	Integer id = Session.get(Key);
     	if(id == null)
     	{
     		return "";
     	}
     	else
     	{
-    		jdbcTemplate.update("INSERT INTO zones (user_id, zone_loc)\r\n" + 
-    				"VALUES (?, ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT( ? ? )', 4326), 3857), ?, 'quad_segs=8'), 4326))", id, lng, lat, radius);
+    	//	jdbcTemplate.update("INSERT INTO zones (user_id, zone_loc)\r\n" + 
+    	//			"VALUES (?, ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT( ? ? )', 4326), 3857), ?, 'quad_segs=8'), 4326))", id, lng, lat, radius);
     		return "Complete";
     	}
     }
     
     @PostMapping("/CreatePolygonZone")
-    String createPolygonZone(@RequestParam String pointsString, @RequestParam String key)
+    String createPolygonZone(@RequestParam String Path, @RequestParam String Key)
     {
-    	//Call createPolygon DB function, assign result to temp
-    	//If zone created, reopen page to display new zone
-    	//else warning and don't change page to avoid deleting zone
-    	
-    	Integer id = Session.get(key);
+    	Integer id = Session.get(Key);
     	if(id == null)
     	{
     		return "";

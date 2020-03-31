@@ -58,7 +58,7 @@ class Zone
 		this.polygonPath = path;
 	}
 }
-//unimportant
+
 function refreshAndUpdate(buttonNumber)
 {
 	sessionStorage.setItem("zoneNum",buttonNumber);
@@ -161,7 +161,6 @@ function UpdateZone(div, map, id)
 {
 	var control = this;
 	
-	
 	// Set CSS for the control border
 	var updateZoneUI = document.createElement('button');
 	updateZoneUI.id = 'updateZoneUI';
@@ -174,54 +173,77 @@ function UpdateZone(div, map, id)
 	updateZoneText.innerHTML = 'Update Zone';
 	updateZoneUI.appendChild(updateZoneText);
 	
-	 updateZoneUI.addEventListener('click', function() {
-		 var token;
-		 var key = sessionStorage.getItem("sessionKey");
-		 var path = document.getElementById('path').innerHTML;
+	updateZoneUI.addEventListener('click', function() 
+	{
+		var token;
+		var key = sessionStorage.getItem("sessionKey");
+		var path = document.getElementById('path').innerHTML;
+		var id = sessionStorage.getItem("zoneID");
 
-		 if (path.localeCompare("") == 0)
-		 {
-			 alert("circle");
-			 
-			 var point = document.getElementById('center').innerHTML;
-			 var radius = document.getElementById('radius').innerHTML;
-			 
-			 var Params = "?Center=" + point + "&Radius=" + radius + "&Key=" + key + "&ID=" + id;
-	         var URL_base = "http://localhost:8080/";
-	         var XHR = new XMLHttpRequest();
-	         XHR.open("PUT", URL_base + "UpdateCircleZone/" + Params, true);
-	         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-			 
-		 }
-		 else
-		 {
-			 alert("polygon");
-			
-			 			 
-			 var Params = "?Path=" + path + "&Key=" + key + "&ID=" + id;
-	         var URL_base = "http://localhost:8080/";
-	         var XHR = new XMLHttpRequest();
-	         XHR.open("PUT", URL_base + "UpdatePolygonZone/" + Params, true);
-	         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-		 }
-		 
-		    
-         XHR.onreadystatechange = function () {
-             sessionKey = this.responseText;
-
-             if (this.readyState == 4 && this.status == 200)
-             {
-                 if(sessionKey.localeCompare("") == 0) {
-                 	alert("An error has occured");
-                 }
-                 else
-                 {
-                     
-                 }
-             }
-         }
-         XHR.send();
-		  });
+		if(id === null)//If a new zone is being created
+		{
+			if (path.localeCompare("") == 0)//If circle
+			 {
+				 alert("circle");
+				 var point = document.getElementById('center').innerHTML;
+				 var radius = document.getElementById('radius').innerHTML;
+				 var Params = "?Center=" + point + "&Radius=" + radius + "&Key=" + key;
+		         var URL_base = "http://localhost:8080/";
+		         var XHR = new XMLHttpRequest();
+		         XHR.open("POST", URL_base + "CreateCircleZone/" + Params, true);
+		         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			 }
+			 else//Else is polygon
+			 {
+				 alert("polygon");	 
+				 var Params = "?Path=" + path + "&Key=" + key + "&ID=" + id;
+		         var URL_base = "http://localhost:8080/";
+		         var XHR = new XMLHttpRequest();
+		         XHR.open("POST", URL_base + "CreatePolygonZone/" + Params, true);
+		         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			 }
+		}
+		else//If a preexisting shape is being edited
+		{
+			if (path.localeCompare("") == 0)//If circle
+			 {
+				 alert("circle");
+				 var point = document.getElementById('center').innerHTML;
+				 var radius = document.getElementById('radius').innerHTML;
+				 var Params = "?Center=" + point + "&Radius=" + radius + "&Key=" + key + "&ID=" + id;
+		         var URL_base = "http://localhost:8080/";
+		         var XHR = new XMLHttpRequest();
+		         XHR.open("PUT", URL_base + "UpdateCircleZone/" + Params, true);
+		         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			 }
+			 else//Else is polygon
+			 {
+				 alert("polygon");		 
+				 var Params = "?Path=" + path + "&Key=" + key + "&ID=" + id;
+		         var URL_base = "http://localhost:8080/";
+		         var XHR = new XMLHttpRequest();
+		         XHR.open("PUT", URL_base + "UpdatePolygonZone/" + Params, true);
+		         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			 }
+		}
+        XHR.onreadystatechange = function () 
+        {
+        	sessionKey = this.responseText;
+        	if (this.readyState == 4 && this.status == 200)
+        	{
+        		if(sessionKey.localeCompare("") == 0) 
+        		{
+            		alert("An error has occured");
+            	}
+            	else
+            	{
+            		
+            	}
+        	}
+		}
+    	XHR.send();
+    	window.location.reload(false);
+	});
 }
 
 
@@ -250,6 +272,7 @@ function DeleteZone(div, map, id)
 
         	var token;
    		 	var key = sessionStorage.getItem("sessionKey");
+   		 	var id = sessionStorage.getItem("zoneID");
    		 
    		 	var Params = "?ID=" + id + "&Key=" + key;
             var URL_base = "http://localhost:8080/";
@@ -272,6 +295,7 @@ function DeleteZone(div, map, id)
                 }
             }
             XHR.send();
+            window.location.reload(false);
    		  
         } else {
            
@@ -279,136 +303,168 @@ function DeleteZone(div, map, id)
         
 	});
 }
+
+function CreateZone()
+{
+	sessionStorage.setItem("createZone", "1");
+	window.location.reload(false);
+}
 		 
 	
 
 //window.onload = SessionCheck();
 
-							    		// This example requires the Drawing library. Include the libraries=drawing
-							    		// parameter when you first load the API. For example:
-							    		// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=drawing">
-	function initMap(zone) {
-		var infowindow = new google.maps.InfoWindow();
-  		var map = new google.maps.Map(document.getElementById('map'), {
-    		center: zone.polygonPath.getAt(0),
-    		zoom: 10
-  		});
-  
-  
-  
-	  	// Create the search box and link it to the UI element.
-	  	var input = document.getElementById('pac-input');
-	  	var searchBox = new google.maps.places.SearchBox(input);
-	  	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-	
-	  	// Bias the SearchBox results towards current map's viewport.
-	  	map.addListener('bounds_changed', function() {
-	    	searchBox.setBounds(map.getBounds());
+// This example requires the Drawing library. Include the libraries=drawing
+// parameter when you first load the API. For example:
+// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=drawing">
+function initMap(zone) {
+	var infowindow = new google.maps.InfoWindow();
+ 		var map = new google.maps.Map(document.getElementById('map'), {
+   		center: zone.polygonPath.getAt(0),
+   		zoom: 10
+ 		});
+ 
+ 
+ 
+  	// Create the search box and link it to the UI element.
+  	var input = document.getElementById('pac-input');
+  	var searchBox = new google.maps.places.SearchBox(input);
+  	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+  	// Bias the SearchBox results towards current map's viewport.
+  	map.addListener('bounds_changed', function() {
+    	searchBox.setBounds(map.getBounds());
+  	});
+
+ var markers = [];
+ // Listen for the event fired when the user selects a prediction and retrieve
+ // more details for that place.
+ searchBox.addListener('places_changed', function() {
+   var places = searchBox.getPlaces();
+
+   if (places.length == 0) {
+     return;
+   }
+
+   // Clear out the old markers.
+   markers.forEach(function(marker) {
+     marker.setMap(null);
+   });
+   markers = [];
+
+   // For each place, get the icon, name and location.
+   var bounds = new google.maps.LatLngBounds();
+   places.forEach(function(place) {
+     if (!place.geometry) {
+       console.log("Returned place contains no geometry");
+       return;
+     }
+     var icon = {
+       url: place.icon,
+       size: new google.maps.Size(71, 71),
+       origin: new google.maps.Point(0, 0),
+       anchor: new google.maps.Point(17, 34),
+       scaledSize: new google.maps.Size(25, 25)
+     };
+
+     // Create a marker for each place.
+     markers.push(new google.maps.Marker({
+       map: map,
+       icon: icon,
+       title: place.name,
+       position: place.geometry.location
+     }));
+
+     if (place.geometry.viewport) {
+       // Only geocodes have viewport.
+       bounds.union(place.geometry.viewport);
+     } else {
+       bounds.extend(place.geometry.location);
+     }
+   });
+   map.fitBounds(bounds);
+ });
+ 
+ var drawingManager = new google.maps.drawing.DrawingManager({
+   drawingControl: true,
+   drawingControlOptions: {
+     position: google.maps.ControlPosition.TOP_RIGHT,
+     drawingModes: ['circle', 'polygon']
+   },
+   markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
+   circleOptions: {
+     clickable: true,
+     editable: true,
+     zIndex: 1
+   },
+   polygonOptions: {
+     clickable: true,
+     editable: true,
+     zIndex: 1
+   }
+ });
+ drawingManager.setMap(map);
+//V------------------------------------------------Polygon Listeners------------------------------------------------------V//
+	google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) 
+	{
+		drawingManager.setOptions
+	  	({
+			drawingControl: false
+		});
+	  	for (var i = 0; i < polygon.getPath().getLength(); i++) 
+	  	{
+	     	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
+	  	}
+	  	drawingManager.setOptions({drawingMode: null});
+	  	
+	  	google.maps.event.addListener(polygon.getPath(), 'insert_at', function() 
+	  	{
+	  		document.getElementById('path').innerHTML = "";
+	  		for (var i = 0; i < polygon.getPath().getLength(); i++) 
+		  	{
+		     	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
+		  	}
 	  	});
-
-  var markers = [];
-  // Listen for the event fired when the user selects a prediction and retrieve
-  // more details for that place.
-  searchBox.addListener('places_changed', function() {
-    var places = searchBox.getPlaces();
-
-    if (places.length == 0) {
-      return;
-    }
-
-    // Clear out the old markers.
-    markers.forEach(function(marker) {
-      marker.setMap(null);
-    });
-    markers = [];
-
-    // For each place, get the icon, name and location.
-    var bounds = new google.maps.LatLngBounds();
-    places.forEach(function(place) {
-      if (!place.geometry) {
-        console.log("Returned place contains no geometry");
-        return;
-      }
-      var icon = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
-
-      // Create a marker for each place.
-      markers.push(new google.maps.Marker({
-        map: map,
-        icon: icon,
-        title: place.name,
-        position: place.geometry.location
-      }));
-
-      if (place.geometry.viewport) {
-        // Only geocodes have viewport.
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-    });
-    map.fitBounds(bounds);
-  });
-  
-  var drawingManager = new google.maps.drawing.DrawingManager({
-    drawingControl: true,
-    drawingControlOptions: {
-      position: google.maps.ControlPosition.TOP_RIGHT,
-      drawingModes: ['circle', 'polygon']
-    },
-    markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
-    circleOptions: {
-      clickable: true,
-      editable: true,
-      zIndex: 1
-    },
-    polygonOptions: {
-      clickable: true,
-      editable: true,
-      zIndex: 1
-    }
-  });
-  drawingManager.setMap(map);
-  
- 	google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) {
-  drawingManager.setOptions({
-	drawingControl: false});
-  
-  for (var i = 0; i < polygon.getPath().getLength(); i++) {
-     document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
-  }
-  drawingManager.setOptions({drawingMode: null});
-});
-
+	  	google.maps.event.addListener(polygon.getPath(), 'set_at', function() 
+	  	{
+	  		document.getElementById('path').innerHTML = "";
+	  		for (var i = 0; i < polygon.getPath().getLength(); i++) 
+		  	{
+		     	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
+		  	}
+	  	});
+	});
+//^-----------------------------------------------------------------------------------------------------------------------^//
+//V--------------------------------------------Circle Listeners-----------------------------------------------------------V//
 google.maps.event.addListener(drawingManager, 'circlecomplete', function (circle) 
 {
-		if (circle.getRadius() > 10000) 
-  	{
-  		circle.setRadius(10000);
-    }
-
-  drawingManager.setOptions({drawingControl: false});
-  
-  document.getElementById('center').innerHTML += circle.getCenter();
-  document.getElementById('radius').innerHTML += circle.getRadius();
-  
-  drawingManager.setOptions({drawingMode: null});
-  
-  google.maps.event.addListener(circle,'radius_changed',function()
-  {
-			if (this.getRadius() > 10000) 
-  	{
-  		this.setRadius(10000);
-    }
-  });
+	if (circle.getRadius() > 10000) 
+	{
+		circle.setRadius(10000);
+	}
+	
+	drawingManager.setOptions({drawingControl: false});
+	  
+	document.getElementById('center').innerHTML = circle.getCenter();
+	document.getElementById('radius').innerHTML = circle.getRadius();
+	drawingManager.setOptions({drawingMode: null});
+	
+	google.maps.event.addListener(circle,'radius_changed',function()
+	{
+		if (this.getRadius() > 10000) 
+		{
+			this.setRadius(10000);
+		}
+		document.getElementById('radius').innerHTML = circle.getRadius();
+	});
+	
+	google.maps.event.addListener(circle,'center_changed',function()
+	{
+		document.getElementById('center').innerHTML = circle.getCenter();
+	});
 });
-
-
+//^-----------------------------------------------------------------------------------------------------------------------^//
+//V-----------------------------------------------Map's Edit and Delete Zone Buttons--------------------------------------V//
 //update zone button
 var updateZoneDiv = document.createElement('div');
 
@@ -427,12 +483,50 @@ var deleteZone = new DeleteZone(deleteZoneDiv, map, sessionStorage.getItem("zone
 deleteZoneDiv.index = 1;
 deleteZoneDiv.style['padding-top'] = '10px';
 map.controls[google.maps.ControlPosition.TOP_CENTER].push(deleteZoneDiv);
+//^-----------------------------------------------------------------------------------------------------------------------^//
+//V--------------------------------------------Init Given Shape On Map(Fix to include circles)----------------------------V//
+if(sessionStorage.getItem("createZone") === null)
+{
+	sessionStorage.removeItem("createZoneStep2");
+	var polygon = new google.maps.Polygon
+		({
+			path: zone.polygonPath,
+			editable: true
+		});
+	drawingManager.setOptions
+		({
+			drawingControl: false
+		});
+	
+	sessionStorage.setItem("zoneID", zone.zoneID);
+	
+	google.maps.event.addListener(polygon.getPath(), 'insert_at', function() 
+	{
+		document.getElementById('path').innerHTML = "";
+		for (var i = 0; i < polygon.getPath().getLength(); i++) 
+	 	{
+	    	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
+	 	}
+	});
+	google.maps.event.addListener(polygon.getPath(), 'set_at', function() 
+	{
+		document.getElementById('path').innerHTML = "";
+		for (var i = 0; i < polygon.getPath().getLength(); i++) 
+	 	{
+	    	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
+	 	}
+	});
+}
+else
+{
+	//To stop polygons from initializing once
+	sessionStorage.removeItem("createZone");
+	sessionStorage.removeItem("zoneID");
+}
+//^-----------------------------------------------------------------------------------------------------------------------^//
 
-
-var polygon = new google.maps.Polygon({
-  path: zone.polygonPath
-});
 polygon.setMap(map);
+
 
 }   
    </script>
@@ -478,7 +572,7 @@ body {
 	</section>
 	<div>
 		<form method="post" id="izgch" class="form">
-			<button type="submit" id="igw0n" class="button">New Zone</button>
+			<button type="submit" id="NewZone" onclick="CreateZone()" class="button">New Zone</button>
 			<div data-form-state="success" id="inm3i" class="state-success">
 				Thanks! We received your request</div>
 			<div data-form-state="error" id="i1cea" class="state-error">An
@@ -507,14 +601,10 @@ body {
 					<div class="cell">
 						<div id="indg" class="gpd-text">Options</div>
 						<form method="post" id="ip8d2" class="form">
-							<button type="submit" id="DeleteZone" onclick="DeleteZone()"
-								class="button">Delete Zone</button>
-							<button type="submit" id="UpdateZone" onclick="UpdateZone()"
-								class="button">Update Zone</button>
-							<div data-form-state="success" id="ivprv" class="state-success">
-								Thanks! We received your request</div>
-							<div data-form-state="error" id="ivz0r" class="state-error">
-								An error occurred on processing your request, try again!</div>
+							<button type="submit" id="DeleteZone" onclick="DeleteZone()" class="button">Delete Zone</button>
+							<button type="submit" id="UpdateZone" onclick="UpdateZone()" class="button">Update Zone</button>
+							<div data-form-state="success" id="ivprv" class="state-success">Thanks! We received your request</div>
+							<div data-form-state="error" id="ivz0r" class="state-error">An error occurred on processing your request, try again!</div>
 						</form>
 					</div>
 				</ul>
