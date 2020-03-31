@@ -98,7 +98,7 @@ class RestService {
     }
 
     @PostMapping("/CreateCircleZone")
-    String createCircleZone(@RequestParam String Center, @RequestParam String Radius, @RequestParam String Key)
+    String createCircleZone(@RequestParam String Center, @RequestParam String Radius, @RequestParam String Key, @RequestParam int userID)
     {
     	Integer id = Session.get(Key);
     	if(id == null)
@@ -107,14 +107,28 @@ class RestService {
     	}
     	else
     	{
-    	//	jdbcTemplate.update("INSERT INTO zones (user_id, zone_loc)\r\n" + 
-    	//			"VALUES (?, ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT( ? ? )', 4326), 3857), ?, 'quad_segs=8'), 4326))", id, lng, lat, radius);
+    	/*jdbcTemplate.update("INSERT INTO zones (user_id, zone_loc)\r\n" + 
+    		"VALUES (?, ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT( ? ? )', 4326), 3857), ?, 'quad_segs=8'), 4326))", id, lng, lat, radius);*/
+    		
+    		
+    		String temp = Center.substring(1, Center.length() - 1);
+    		String[] stringList = temp.split(",");
+    		
+    		double lat = Double.parseDouble(stringList[0]);
+    		double lng = Double.parseDouble(stringList[1]);
+    		double radius = Double.parseDouble(Radius);
+    		
+    		String insertZoneQuery = String.format("INSERT INTO zones (user_id, zone_loc) " 
+    				+ "VALUES (%d, ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT(%f %f)',4326),3857),%d,'quad_segs=8'),4326))", userID, lng, lat, radius);
+    		
+    		jdbcTemplate.update(insertZoneQuery);
     		return "Complete";
+    		
     	}
     }
     
     @PostMapping("/CreatePolygonZone")
-    String createPolygonZone(@RequestParam String Path, @RequestParam String Key)
+    String createPolygonZone(@RequestParam String Path, @RequestParam String Key, @RequestParam int userID)
     {
     	Integer id = Session.get(Key);
     	if(id == null)
@@ -124,6 +138,33 @@ class RestService {
     	else
     	{
     		//jdbcTemplate.update("INSERT INTO zones (user_id, zone_loc) VALUES (?,ST_GeomFromText('POLYGON((?))',4326))", id, pointsString);
+   
+    		
+    		String[] splitPath = Path.split(",");
+    		
+    		String first = "";
+    		String polygonPath = "";
+    		for(int i = 0; i < splitPath.length; i += 2)
+    		{
+    			polygonPath += splitPath[i+1];
+    			polygonPath += " ";
+    			polygonPath += splitPath[i];
+    			polygonPath += ",";
+    			
+    			if(first.equals(""))
+    			{
+    				first = polygonPath;
+    			}
+    		}
+    		
+    		polygonPath += first;
+    		
+    		polygonPath = polygonPath.substring(0, polygonPath.length() - 1);
+    		
+    		String insertZoneQuery = String.format("INSERT INTO zones (user_id, zone_loc)"
+    				+ "VALUES (%d, ST_GeomFromText('POLYGON((%s))',4326))", userID, polygonPath);
+    		
+    		jdbcTemplate.update(insertZoneQuery);
     		return "Complete";
     	}
     }
