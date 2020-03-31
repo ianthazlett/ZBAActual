@@ -2,12 +2,12 @@ package team16.models;
 
 public class Zone {
 	
-	private int zoneID;
+	private int zone_id;
 	private String location;
 	
-	public Zone(int zoneID, String location)
+	public Zone(int zone_id, String location)
 	{
-		this.zoneID = zoneID;
+		this.zone_id = zone_id;
 		this.location = location;
 	}
 	
@@ -16,11 +16,11 @@ public class Zone {
 		
 	}
 	
-	public int getZoneID() {
-		return zoneID;
+	public int getZone_ID() {
+		return zone_id;
 	}
-	public void setZoneID(int zoneID) {
-		this.zoneID = zoneID;
+	public void setZone_ID(int zone_ID) {
+		this.zone_id = zone_ID;
 	}
 	public String getLocation() {
 		return location;

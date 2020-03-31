@@ -25,12 +25,14 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
 
 import team16.models.UserModel;
 
@@ -58,83 +60,109 @@ public class ZbaApplication implements CommandLineRunner{
 		int test = jdbcTemplate.update("INSERT INTO users(email, password, address, admin) VALUES(?,?,?,?)", params, types);	
 		System.out.print(test);*/
 		
-		/*JSONObject paTrigger = new JSONObject();
-		JSONObject timePeriod = new JSONObject();
-		JSONObject end = new JSONObject();
-		JSONObject start = new JSONObject();
-		JSONObject conditions = new JSONObject();
-		JSONObject area = new JSONObject();
 		
-		String timeExpression = "after";
-		int startAmount = 0;
-		int endAmount = 432000000;
 		
-		String condName = "temp";
-		String condExpression = "$gt";
-		int condAmount = 299;
+		Alert alertOne = new Alert(1, "Thunderstorm", 41.349307, -79.711084, "Severe", "E", 16); //cranberry
+		Alert alertTwo = new Alert(2, "Tornado", 42.112455, -80.063004, "Category 4", "SSE", 30, "Seek cover immediately!"); //erie
+		Alert alertThree = new Alert(3, "Flash Flooding", 41.641134, -80.151444); //meadville
+		Alert alertFour = new Alert(4, "Winter Storm", 42.886088, -78.878685, "Mild", "ESE", 10); //buffalo
+		Alert alertFive = new Alert(5, "Hurricane", 29.950771, -90.071675, "Category 3", "NNW", 20, "Seek cover or evacuate immediately!"); //new orleans
 		
-		String areaType = "Polygon";
-		double[][] coords = {{42.31337,-81.13905}, {39.32494,-81.255}, {39.42163,-72.92079}, {42.46941,-73.15992}};
-		JSONArray JSONCoords= new JSONArray();
-		for (int i = 0; i < coords.length; i++)
+		Alert[] alertArray = {alertOne, alertTwo, alertThree, alertFour, alertFive};
+		
+		
+		while(true)
 		{
-			JSONCoords.add(coords[i]);
-		}
+			//get random new alert
+			Random rand = new Random();
+			
+			int i = rand.nextInt(5);
+			
+			Alert testAlert = alertArray[i];
+			
+			
+			//insert new alert into database
+			String insertAlertQuery = String.format("INSERT INTO Alerts (name, severity, bearing, speed, action, alert_loc) " +
+					"VALUES ('%s', '%s', '%s', %d, '%s', ST_GeomFromText('POINT(%f %f)', 4326))",
+					testAlert.getName(), testAlert.getSeverity(), testAlert.getBearing(), testAlert.getSpeed(), testAlert.getAction(), testAlert.getLongitude(), testAlert.getLatitute());
+			
+			jdbcTemplate.update(insertAlertQuery);
+			
+			//get alert_id of new alert
+			String alertQuery = "SELECT MAX(alert_id) FROM alerts";
+			int alertID = jdbcTemplate.queryForObject(alertQuery, Integer.class);
+			
+			
+			//get email of users with zones containing new alert
+			String userQuery = String.format("SELECT email FROM users JOIN zones ON users.user_id = zones.user_id " 
+					+ "WHERE ST_Contains(zone_loc::geometry, ST_GeomFromText('POINT(%f %f)', 4326))", testAlert.getLongitude(), testAlert.getLatitute());
+			/*
+			UserModel alertUser = (UserModel) jdbcTemplate.queryForObject(
+	                userQuery,
+	                new BeanPropertyRowMapper<UserModel>(UserModel.class));*/
+			
+			List<String> emailList = jdbcTemplate.queryForList(userQuery, String.class);
+			
+			//get zone_id of zones containing new alert
+			String zoneQuery = String.format("SELECT zone_id FROM users JOIN zones ON users.user_id = zones.user_id " 
+					+ "WHERE ST_Contains(zone_loc::geometry, ST_GeomFromText('POINT(%f %f)', 4326))", testAlert.getLongitude(), testAlert.getLatitute());
+			
+			/*
+			Zone alertZone = (Zone) jdbcTemplate.queryForObject(
+	                zoneQuery,
+	                new BeanPropertyRowMapper<Zone>(Zone.class));*/
+			
+			List<Integer> zoneList = jdbcTemplate.queryForList(zoneQuery, Integer.class);
+			
+			
+			for (int j = 0; j < emailList.size(); j++)
+			{
+				
+				//map new alert to zone containing it
+				String zoneAlertQuery = String.format("INSERT INTO zone_alerts (zone_id, alert_id) VALUES (%d, %d)", zoneList.get(j), alertID);
+				jdbcTemplate.update(zoneAlertQuery);
+				
+				
+				//https://www.baeldung.com/java-email
+				Properties prop = new Properties();
+				prop.put("mail.smtp.auth", true);
+				prop.put("mail.smtp.starttls.enable", "true");
+				prop.put("mail.smtp.host", "smtp.mailtrap.io");
+				prop.put("mail.smtp.port", "2525");
+				prop.put("mail.smtp.ssl.trust", "smtp.mailtrap.io");
+				
+				String username = "493acfd9f96793";
+				String password = "215f8f0b5b6d97";
+				
+				Session session = Session.getInstance(prop, new Authenticator() {
+				    @Override
+				    protected PasswordAuthentication getPasswordAuthentication() {
+				        return new PasswordAuthentication(username, password);
+				    }
+				});
+				
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress("dbleagle96@gmail.com"));
+				message.setRecipients(
+				  Message.RecipientType.TO, InternetAddress.parse(emailList.get(j)));
+				message.setSubject("Alert!");
+				
+				String messageText = String.format("Alert for zone %d: %s", zoneList.get(j), testAlert.getName());
+	
+				MimeBodyPart mimeBodyPart = new MimeBodyPart();
+				mimeBodyPart.setContent(messageText, "text/html");
+	
+				Multipart multipart = new MimeMultipart();
+				multipart.addBodyPart(mimeBodyPart);
+	
+				message.setContent(multipart);
+	
+				Transport.send(message);
+			}
 		
-		
-		end.put("expression", timeExpression);
-		end.put("amount", endAmount);
-		
-		start.put("expression", timeExpression);
-		start.put("amount", startAmount);
-		
-		timePeriod.put("start", start);
-		timePeriod.put("end", end);
-		
-		conditions.put("name", condName);
-		conditions.put("expression", condExpression);
-		conditions.put("amount", condAmount);
-		
-		area.put("type", "Point");
-		area.put("coordinates", JSONCoords);
-		
-		paTrigger.put("time_period", timePeriod);
-		paTrigger.put("conditions", conditions);
-		paTrigger.put("area", area);
-		
-		System.out.println(paTrigger);*/
-		
-		Trigger paTrigger = new Trigger();
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		String requestString = objectMapper.writeValueAsString(paTrigger);
-		
-		System.out.println(requestString);
-		objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File("C:\\Users\\wildblood96\\Desktop\\test.json"), paTrigger);
-		
-		URL url = new URL("http://api.openweathermap.org/data/3.0/triggers?APPID=ebc975dd2120b3a1ae16da758ad86fd0");
-		
-		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-		conn.setRequestMethod("POST");
-	    conn.setRequestProperty("Content-Type", "application/json; utf-8");
-	    conn.setRequestProperty("Accept", "application/json");
-	    conn.setDoOutput(true);
-	    
-	    try(OutputStream os = conn.getOutputStream()) {
-	        byte[] input = requestString.getBytes("utf-8");
-	        os.write(input, 0, input.length);
-	    }
-	    
-	    try(BufferedReader br = new BufferedReader(
-	    		  new InputStreamReader(conn.getInputStream(), "utf-8"))) { //error code 500, not API key, server error
-	    		    StringBuilder response = new StringBuilder();
-	    		    String responseLine = null;
-	    		    while ((responseLine = br.readLine()) != null) {
-	    		        response.append(responseLine.trim());
-	    		    }
-	    		    System.out.println(response.toString());
-	    		}
+			//sleep for 30 seconds
+			Thread.sleep(30000);
+		}//while(true);
 		
 	}
-
 }
