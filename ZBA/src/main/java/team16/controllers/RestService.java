@@ -275,9 +275,18 @@ class RestService {
     		ret.setZoneAmount(zoneList.size());
     		
     		//stuff to get the associated alerts
-    		Alert alert = new Alert(0, "test", 50, 50, "severe", "weast", 350, "Perish");
-    		List<Alert> alerts = new ArrayList<Alert>();
-    		alerts.add(alert);
+    		
+    		String zoneAlertQuery = String.format("SELECT alerts.alert_id, name, severity, bearing, speed, action, ST_X(alert_loc::geometry) AS latitude, ST_Y(alert_loc::geometry) AS longitude " + 
+    				"FROM alerts join zone_alerts on alerts.alert_id = zone_alerts.alert_id " + 
+    				"WHERE zone_id = %d", zoneList.get(zoneNum).getZone_ID());
+    		
+    		BeanPropertyRowMapper rowMapper = BeanPropertyRowMapper.newInstance(Alert.class);
+    		
+    		List<Alert> alerts = jdbcTemplate.query(zoneAlertQuery, rowMapper);	
+    		
+    		//Alert alert = new Alert(0, "test", 50, 50, "severe", "weast", 350, "Perish");
+    		//List<Alert> alerts = new ArrayList<Alert>();
+    		//alerts.add(alert);
     		ret.setAlerts(alerts);
     		return ret;
     	}
