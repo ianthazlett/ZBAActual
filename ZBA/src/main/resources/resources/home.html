@@ -67,8 +67,7 @@ function refreshAndUpdate(buttonNumber)
 
 function SessionCheck()
 {
-	
-    var key = sessionStorage.getItem("sessionKey");
+	var key = sessionStorage.getItem("sessionKey");
     var zoneNum = sessionStorage.getItem("zoneNum");
     //alert(zoneNum);
     if(key === null)
@@ -83,120 +82,107 @@ function SessionCheck()
 	}
 
     var token;
-	/*
-	Ramblings:
-		send request with key for verify and zoneNum, default to 0 if null
-		return that zone from list in ReturnZones
-		gut the for loop that treats it as a list
-		create tabs based off of the number of zones user has
-	*/
+
 
     var Params = "?Key=" + key + "&zoneNum=" + zoneNum;
     var URL_base = "http://localhost:8080/";
     var XHR = new XMLHttpRequest();
     XHR.open("GET", URL_base + "SessionCheck/" + Params, true);
     XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-
-    XHR.onreadystatechange = function () {
-    	
-
-        if (this.readyState == 4 && this.status == 200)
-        {
-        	var returnJson = this.responseText;
-        	returnJson = JSON.parse(returnJson);
-        	//alert(this.responseText);
-        	
-            if(returnJson == null) 
-            {
-            	alert("Invalid session key, please log in.");
-            	window.location.href = "http://localhost:8080/login.html";
-            }
-            else
-            {
-            	var zoneJson = returnJson.zone;
-            	var alertJson = returnJson.alerts;
-            	var zoneAmount = returnJson.zoneAmount;
-            	
-           		var points = zoneJson.location.substring(9, zoneJson.location.length - 3);
-           		points = points.split(",");
-           		var pointArray = [];
-           		var j;
-           		for(j = 0; j < points.length; j++)
-           			{
-           				var point = points[j].split(" ");
-           				//alert(point);
-           				var mapPoint = new google.maps.LatLng({lat: parseFloat(point[1]), lng: parseFloat(point[0])});
-           				pointArray.push(mapPoint);
-           			}
-       
-           		var polygonPath = new google.maps.MVCArray(pointArray);
-           		var currentZone = new Zone(zoneJson.zone_ID, polygonPath);
-           		//alert(zoneJson[i].zone_ID);
-
-            	var tabs = document.getElementById("tabs");
-            	
-            	for(i = 1; i < zoneAmount; i++)
-            	{
-            		var tab = document.createElement("INPUT");
-            		tab.type = "button";
-            		tab.value = ("Zone " + (i + 1));
-            		var zone = i;
-            		tab.onclick = (function(zone)
-            		{
-            			return function()
-            			{
-            				sessionStorage.setItem("zoneNum",zone);
-                			window.location.reload(false);
-            			}
-            		})(zone);
-            		tabs.appendChild(tab);
-            	}
-            	var alertMain = document.getElementById("ActiveAlerts");
-            	
-            	for(i = 0; i < alertJson.length; i++)
-            	{
-            		var alertDiv = document.createElement("div");
-            		var infoDiv = document.createElement("div");
-            		var actionDiv = document.createElement("div");
-            		
-            		alertDiv.style.border = "thick solid #0000FF";
-            		infoDiv.style.border = "thick solid #0000FF";
-            		actionDiv.style.border = "thick solid #0000FF";
-            		
-            		alertDiv.appendChild(infoDiv);
-            		alertDiv.appendChild(actionDiv);
-            		
-            		var name = document.createElement("P");
-            		name.innerHTML = alertJson[i].name;
-            		infoDiv.appendChild(name);
-            		
-            		var severity = document.createElement("P");
-            		severity.innerHTML = alertJson[i].severity;
-            		infoDiv.appendChild(severity);
-            		
-            		var speed = document.createElement("P");
-            		speed.innerHTML = alertJson[i].speed;
-            		infoDiv.appendChild(speed);
-            		
-            		var bearing = document.createElement("P");
-            		bearing.innerHTML = alertJson[i].bearing;
-            		infoDiv.appendChild(bearing);
-            		
-            		var action = document.createElement("P");
-            		action.innerHTML = alertJson[i].action;
-            		actionDiv.appendChild(action);
-            		
-            		alertMain.appendChild(alertDiv);
-            		
-            	}
-            	
-            	initMap(currentZone);
-            }
-            
-            
-            
-        }
+    XHR.onreadystatechange = function () 
+    {
+	    if (this.readyState == 4 && this.status == 200)
+	    {
+	    	var returnJson = this.responseText;
+	    	returnJson = JSON.parse(returnJson);
+	    	//alert(this.responseText);
+	    	
+	        if(returnJson == null) 
+	        {
+	        	alert("Invalid session key, please log in.");
+	        	window.location.href = "http://localhost:8080/login.html";
+	        }
+	        else
+	        {
+	        	var zoneJson = returnJson.zone;
+	        	var alertJson = returnJson.alerts;
+	        	var zoneAmount = returnJson.zoneAmount;
+	        	
+	       		var points = zoneJson.location.substring(9, zoneJson.location.length - 3);
+	       		points = points.split(",");
+	       		var pointArray = [];
+	       		var j;
+	       		for(j = 0; j < points.length; j++)
+	       			{
+	       				var point = points[j].split(" ");
+	       				//alert(point);
+	       				var mapPoint = new google.maps.LatLng({lat: parseFloat(point[1]), lng: parseFloat(point[0])});
+	       				pointArray.push(mapPoint);
+	       			}
+	   
+	       		var polygonPath = new google.maps.MVCArray(pointArray);
+	       		var currentZone = new Zone(zoneJson.zone_ID, polygonPath);
+	       		//alert(zoneJson[i].zone_ID);
+	
+	        	var tabs = document.getElementById("tabs");
+	        	
+	        	for(i = 1; i < zoneAmount; i++)
+	        	{
+	        		var tab = document.createElement("INPUT");
+	        		tab.type = "button";
+	        		tab.value = ("Zone " + (i + 1));
+	        		var zone = i;
+	        		tab.onclick = (function(zone)
+	        		{
+	        			return function()
+	        			{
+	        				sessionStorage.setItem("zoneNum",zone);
+	            			window.location.reload(false);
+	        			}
+	        		})(zone);
+	        		tabs.appendChild(tab);
+	        	}
+	        	var alertMain = document.getElementById("ActiveAlerts");
+	        	
+	        	for(i = 0; i < alertJson.length; i++)
+	        	{
+	        		var alertDiv = document.createElement("div");
+	        		var infoDiv = document.createElement("div");
+	        		var actionDiv = document.createElement("div");
+	        		
+	        		alertDiv.style.border = "thick solid #0000FF";
+	        		infoDiv.style.border = "thick solid #0000FF";
+	        		actionDiv.style.border = "thick solid #0000FF";
+	        		
+	        		alertDiv.appendChild(infoDiv);
+	        		alertDiv.appendChild(actionDiv);
+	        		
+	        		var name = document.createElement("P");
+	        		name.innerHTML = alertJson[i].name;
+	        		infoDiv.appendChild(name);
+	        		
+	        		var severity = document.createElement("P");
+	        		severity.innerHTML = alertJson[i].severity;
+	        		infoDiv.appendChild(severity);
+	        		
+	        		var speed = document.createElement("P");
+	        		speed.innerHTML = alertJson[i].speed;
+	        		infoDiv.appendChild(speed);
+	        		
+	        		var bearing = document.createElement("P");
+	        		bearing.innerHTML = alertJson[i].bearing;
+	        		infoDiv.appendChild(bearing);
+	        		
+	        		var action = document.createElement("P");
+	        		action.innerHTML = alertJson[i].action;
+	        		actionDiv.appendChild(action);
+	        		
+	        		alertMain.appendChild(alertDiv);
+	        		
+	        	}	
+	        	initMap(currentZone);
+	        }    
+	    }
     }
     XHR.send();
 }
@@ -313,39 +299,36 @@ function DeleteZone(div, map, id)
 	
 	deleteZoneUI.addEventListener('click', function() {
 		
-		var confirmation = confirm("Are you sure you want to delete this zone?");
-        if( confirmation == true ) {
-
-        	var token;
-   		 	var key = sessionStorage.getItem("sessionKey");
-   		 	var id = sessionStorage.getItem("zoneID");
-   		 	var Params = "?ID=" + id + "&Key=" + key;
-            var URL_base = "http://localhost:8080/";
-            var XHR = new XMLHttpRequest();
-            XHR.open("DELETE", URL_base + "DeleteZone/" + Params, true);
-            XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-   		 
-   		 	XHR.onreadystatechange = function () {
-                sessionKey = this.responseText;
-
-                if (this.readyState == 4 && this.status == 200)
-                {
-                    if(sessionKey.localeCompare("") == 0) {
-                    	alert("An error has occured");
-                    }
-                    else
-                    {
-                        
-                    }
-                }
-            }
-            XHR.send();
-            window.location.reload(false);
-   		  
-        } else {
-           
+	var confirmation = confirm("Are you sure you want to delete this zone?");
+    if( confirmation == true ) 
+    {
+    	var token;
+  		var key = sessionStorage.getItem("sessionKey");
+  		var id = sessionStorage.getItem("zoneID");
+  		var Params = "?ID=" + id + "&Key=" + key;
+        var URL_base = "http://localhost:8080/";
+        var XHR = new XMLHttpRequest();
+        XHR.open("DELETE", URL_base + "DeleteZone/" + Params, true);
+        XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  		XHR.onreadystatechange = function () 
+  		{
+  			sessionKey = this.responseText;
+            if (this.readyState == 4 && this.status == 200)
+           	{
+	            if(sessionKey.localeCompare("") == 0) 
+	            {
+	            	alert("An error has occured");
+	            }
+	            else
+	            {
+	                
+	            }
+           	}
         }
-        
+        XHR.send();
+        window.location.reload(false);  
+        } 
+    else {}
 	});
 }
 
@@ -362,93 +345,108 @@ function CreateZone()
 // This example requires the Drawing library. Include the libraries=drawing
 // parameter when you first load the API. For example:
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=drawing">
-function initMap(zone) {
+function initMap(zone) 
+{
 	var infowindow = new google.maps.InfoWindow();
- 		var map = new google.maps.Map(document.getElementById('map'), {
+ 	var map = new google.maps.Map(document.getElementById('map'), 
+ 	{
    		center: zone.polygonPath.getAt(0),
    		zoom: 10
- 		});
- 
- 
- 
+ 	});
   	// Create the search box and link it to the UI element.
   	var input = document.getElementById('pac-input');
   	var searchBox = new google.maps.places.SearchBox(input);
   	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
   	// Bias the SearchBox results towards current map's viewport.
-  	map.addListener('bounds_changed', function() {
-    	searchBox.setBounds(map.getBounds());
+  	map.addListener('bounds_changed', function() 
+  	{
+  		searchBox.setBounds(map.getBounds());
   	});
 
- var markers = [];
- // Listen for the event fired when the user selects a prediction and retrieve
- // more details for that place.
- searchBox.addListener('places_changed', function() {
-   var places = searchBox.getPlaces();
+ 	var markers = [];
+ 	// Listen for the event fired when the user selects a prediction and retrieve
+ 	// more details for that place.
+ 	searchBox.addListener('places_changed', function() 
+ 	{
+   		var places = searchBox.getPlaces();
+   		if (places.length == 0) 
+   		{
+     		return;
+   		}
+   		// Clear out the old markers.
+   		markers.forEach(function(marker) 
+   		{
+     		marker.setMap(null);
+   		});
+   		
+   		markers = [];
 
-   if (places.length == 0) {
-     return;
-   }
-
-   // Clear out the old markers.
-   markers.forEach(function(marker) {
-     marker.setMap(null);
-   });
-   markers = [];
-
-   // For each place, get the icon, name and location.
-   var bounds = new google.maps.LatLngBounds();
-   places.forEach(function(place) {
-     if (!place.geometry) {
-       console.log("Returned place contains no geometry");
-       return;
-     }
-     var icon = {
-       url: place.icon,
-       size: new google.maps.Size(71, 71),
-       origin: new google.maps.Point(0, 0),
-       anchor: new google.maps.Point(17, 34),
-       scaledSize: new google.maps.Size(25, 25)
-     };
-
-     // Create a marker for each place.
-     markers.push(new google.maps.Marker({
-       map: map,
-       icon: icon,
-       title: place.name,
-       position: place.geometry.location
-     }));
-
-     if (place.geometry.viewport) {
-       // Only geocodes have viewport.
-       bounds.union(place.geometry.viewport);
-     } else {
-       bounds.extend(place.geometry.location);
-     }
-   });
-   map.fitBounds(bounds);
- });
- 
- var drawingManager = new google.maps.drawing.DrawingManager({
-   drawingControl: true,
-   drawingControlOptions: {
-     position: google.maps.ControlPosition.TOP_RIGHT,
-     drawingModes: ['circle', 'polygon']
-   },
-   markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
-   circleOptions: {
-     clickable: true,
-     editable: true,
-     zIndex: 1
-   },
-   polygonOptions: {
-     clickable: true,
-     editable: true,
-     zIndex: 1
-   }
- });
- drawingManager.setMap(map);
+   		// For each place, get the icon, name and location.
+   		var bounds = new google.maps.LatLngBounds();
+   	
+   		places.forEach(function(place) 
+   		{
+    		if (!place.geometry) 
+    		{
+	       		console.log("Returned place contains no geometry");
+	       		return;
+	     	}
+	     	var icon = 
+	     	{
+	       		url: place.icon,
+	       		size: new google.maps.Size(71, 71),
+	       		origin: new google.maps.Point(0, 0),
+	       		anchor: new google.maps.Point(17, 34),
+	       		scaledSize: new google.maps.Size(25, 25)
+	     	};
+	
+	     	// Create a marker for each place.
+	     	markers.push(new google.maps.Marker(
+	     	{
+	       		map: map,
+	       		icon: icon,
+	       		title: place.name,
+	       		position: place.geometry.location
+	     	}));
+	
+	     	if (place.geometry.viewport) 
+	     	{
+	       		// Only geocodes have viewport.
+	       		bounds.union(place.geometry.viewport);
+	     	}
+	     	else 
+	     	{
+	       		bounds.extend(place.geometry.location);
+	     	}
+	   	});
+   		map.fitBounds(bounds);
+ 	});
+   	
+	var drawingManager = new google.maps.drawing.DrawingManager(
+	{
+   		drawingControl: true,
+   		drawingControlOptions: 
+   		{
+    		position: google.maps.ControlPosition.TOP_RIGHT,
+     		drawingModes: ['circle', 'polygon']
+   		},
+   		markerOptions: {icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'},
+   		circleOptions: 
+   		{
+    		clickable: true,
+     		editable: true,
+     		zIndex: 1
+   		},
+   		polygonOptions: 
+   		{
+    		clickable: true,
+     		editable: true,
+     		zIndex: 1
+  		}
+ 	});
+	
+ 	drawingManager.setMap(map);
 //V------------------------------------------------Polygon Listeners------------------------------------------------------V//
 	google.maps.event.addListener(drawingManager, 'polygoncomplete', function (polygon) 
 	{
@@ -481,95 +479,95 @@ function initMap(zone) {
 	});
 //^-----------------------------------------------------------------------------------------------------------------------^//
 //V--------------------------------------------Circle Listeners-----------------------------------------------------------V//
-google.maps.event.addListener(drawingManager, 'circlecomplete', function (circle) 
-{
-	if (circle.getRadius() > 10000) 
+	google.maps.event.addListener(drawingManager, 'circlecomplete', function (circle) 
 	{
-		circle.setRadius(10000);
-	}
-	
-	drawingManager.setOptions({drawingControl: false});
-	  
-	document.getElementById('center').innerHTML = circle.getCenter();
-	document.getElementById('radius').innerHTML = circle.getRadius();
-	drawingManager.setOptions({drawingMode: null});
-	
-	google.maps.event.addListener(circle,'radius_changed',function()
-	{
-		if (this.getRadius() > 10000) 
+		if (circle.getRadius() > 10000) 
 		{
-			this.setRadius(10000);
+			circle.setRadius(10000);
 		}
-		document.getElementById('radius').innerHTML = circle.getRadius();
-	});
-	
-	google.maps.event.addListener(circle,'center_changed',function()
-	{
+		
+		drawingManager.setOptions({drawingControl: false});
+		  
 		document.getElementById('center').innerHTML = circle.getCenter();
+		document.getElementById('radius').innerHTML = circle.getRadius();
+		drawingManager.setOptions({drawingMode: null});
+		
+		google.maps.event.addListener(circle,'radius_changed',function()
+		{
+			if (this.getRadius() > 10000) 
+			{
+				this.setRadius(10000);
+			}
+			document.getElementById('radius').innerHTML = circle.getRadius();
+		});
+		
+		google.maps.event.addListener(circle,'center_changed',function()
+		{
+			document.getElementById('center').innerHTML = circle.getCenter();
+		});
 	});
-});
 //^-----------------------------------------------------------------------------------------------------------------------^//
 //V-----------------------------------------------Map's Edit and Delete Zone Buttons--------------------------------------V//
 //update zone button
-var updateZoneDiv = document.createElement('div');
-
-var updateZone = new UpdateZone(updateZoneDiv, map, sessionStorage.getItem("zoneID"));
-
-updateZoneDiv.index = 1;
-updateZoneDiv.style['padding-top'] = '10px';
-map.controls[google.maps.ControlPosition.TOP_CENTER].push(updateZoneDiv);
-
-
-//delete zone button
-var deleteZoneDiv = document.createElement('div');
-
-var deleteZone = new DeleteZone(deleteZoneDiv, map, sessionStorage.getItem("zoneID"));
-
-deleteZoneDiv.index = 1;
-deleteZoneDiv.style['padding-top'] = '10px';
-map.controls[google.maps.ControlPosition.TOP_CENTER].push(deleteZoneDiv);
+	var updateZoneDiv = document.createElement('div');
+	
+	var updateZone = new UpdateZone(updateZoneDiv, map, sessionStorage.getItem("zoneID"));
+	
+	updateZoneDiv.index = 1;
+	updateZoneDiv.style['padding-top'] = '10px';
+	map.controls[google.maps.ControlPosition.TOP_CENTER].push(updateZoneDiv);
+	
+	
+	//delete zone button
+	var deleteZoneDiv = document.createElement('div');
+	
+	var deleteZone = new DeleteZone(deleteZoneDiv, map, sessionStorage.getItem("zoneID"));
+	
+	deleteZoneDiv.index = 1;
+	deleteZoneDiv.style['padding-top'] = '10px';
+	map.controls[google.maps.ControlPosition.TOP_CENTER].push(deleteZoneDiv);
 //^-----------------------------------------------------------------------------------------------------------------------^//
 //V--------------------------------------------Init Given Shape On Map(Fix to show circles as circles)----------------------------V//
-if(sessionStorage.getItem("createZone") === null)
-{
-	sessionStorage.removeItem("createZoneStep2");
-	var polygon = new google.maps.Polygon
-		({
-			path: zone.polygonPath,
-			editable: true
-		});
-	drawingManager.setOptions
-		({
-			drawingControl: false
-		});
-	
-	sessionStorage.setItem("zoneID", zone.zoneID);
-	
-	google.maps.event.addListener(polygon.getPath(), 'insert_at', function() 
+	if(sessionStorage.getItem("createZone") === null)
 	{
-		document.getElementById('path').innerHTML = "";
-		for (var i = 0; i < polygon.getPath().getLength(); i++) 
-	 	{
-	    	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
-	 	}
-	});
-	google.maps.event.addListener(polygon.getPath(), 'set_at', function() 
+		sessionStorage.removeItem("createZoneStep2");
+		var polygon = new google.maps.Polygon
+			({
+				path: zone.polygonPath,
+				editable: true
+			});
+		drawingManager.setOptions
+			({
+				drawingControl: false
+			});
+		
+		sessionStorage.setItem("zoneID", zone.zoneID);
+		
+		google.maps.event.addListener(polygon.getPath(), 'insert_at', function() 
+		{
+			document.getElementById('path').innerHTML = "";
+			for (var i = 0; i < polygon.getPath().getLength(); i++) 
+		 	{
+		    	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
+		 	}
+		});
+		google.maps.event.addListener(polygon.getPath(), 'set_at', function() 
+		{
+			document.getElementById('path').innerHTML = "";
+			for (var i = 0; i < polygon.getPath().getLength(); i++) 
+		 	{
+		    	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
+		 	}
+		});
+		
+		polygon.setMap(map);
+	}
+	else
 	{
-		document.getElementById('path').innerHTML = "";
-		for (var i = 0; i < polygon.getPath().getLength(); i++) 
-	 	{
-	    	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
-	 	}
-	});
-	
-	polygon.setMap(map);
-}
-else
-{
-	//To stop polygons from initializing once
-	sessionStorage.removeItem("createZone");
-	sessionStorage.removeItem("zoneID");
-}
+		//To stop polygons from initializing once
+		sessionStorage.removeItem("createZone");
+		sessionStorage.removeItem("zoneID");
+	}
 //^-----------------------------------------------------------------------------------------------------------------------^//
 }   
    </script>
