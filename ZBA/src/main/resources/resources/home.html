@@ -69,17 +69,29 @@ function SessionCheck()
 {
 	
     var key = sessionStorage.getItem("sessionKey");
+    var zoneNum = sessionStorage.getItem("zoneNum");
     //alert(zoneNum);
     if(key === null)
     {
     	alert("Invalid session key, please log in.");
     	window.location.href = "http://localhost:8080/login.html";
     }
+    
+    if(zoneNum == null)
+	{
+		sessionStorage.setItem("zoneNum",0);
+	}
 
     var token;
+	/*
+	Ramblings:
+		send request with key for verify and zoneNum, default to 0 if null
+		return that zone from list in ReturnZones
+		gut the for loop that treats it as a list
+		create tabs based off of the number of zones user has
+	*/
 
-
-    var Params = "?Key=" + key;
+    var Params = "?Key=" + key + "&zoneNum=" + zoneNum;
     var URL_base = "http://localhost:8080/";
     var XHR = new XMLHttpRequest();
     XHR.open("GET", URL_base + "SessionCheck/" + Params, true);
@@ -91,45 +103,40 @@ function SessionCheck()
 
         if (this.readyState == 4 && this.status == 200)
         {
-        	var zoneJson = this.responseText;
-        	zoneJson = JSON.parse(zoneJson);
+        	var returnJson = this.responseText;
+        	returnJson = JSON.parse(returnJson);
         	//alert(this.responseText);
         	
-            if(zoneJson == null) 
+            if(returnJson == null) 
             {
             	alert("Invalid session key, please log in.");
             	window.location.href = "http://localhost:8080/login.html";
             }
             else
             {
-            	for(i = 0; i < zoneJson.zoneList.length; i++)
-            	{
-            		var points = zoneJson.zoneList[i].location.substring(9, zoneJson.zoneList[i].location.length - 3);
-            		points = points.split(",");
-            		var pointArray = [];
-            		var j;
-            		for(j = 0; j < points.length; j++)
-            			{
-            				var point = points[j].split(" ");
-            				//alert(point);
-            				var mapPoint = new google.maps.LatLng({lat: parseFloat(point[1]), lng: parseFloat(point[0])});
-            				pointArray.push(mapPoint);
-            			}
-        
-            		var polygonPath = new google.maps.MVCArray(pointArray);
-            		var zone = new Zone(zoneJson.zoneList[i].zone_ID, polygonPath);
-            		//alert(zoneJson.zoneList[i].zone_ID);
-            		zoneList.push(zone);
-            	}
+            	var zoneJson = returnJson.zone;
+            	var alertJson = returnJson.alerts;
+            	var zoneAmount = returnJson.zoneAmount;
             	
-            	if(sessionStorage.getItem("zoneNum") == null)
-            	{
-            		sessionStorage.setItem("zoneNum",0);
-            	}
+           		var points = zoneJson.location.substring(9, zoneJson.location.length - 3);
+           		points = points.split(",");
+           		var pointArray = [];
+           		var j;
+           		for(j = 0; j < points.length; j++)
+           			{
+           				var point = points[j].split(" ");
+           				//alert(point);
+           				var mapPoint = new google.maps.LatLng({lat: parseFloat(point[1]), lng: parseFloat(point[0])});
+           				pointArray.push(mapPoint);
+           			}
+       
+           		var polygonPath = new google.maps.MVCArray(pointArray);
+           		var currentZone = new Zone(zoneJson.zone_ID, polygonPath);
+           		//alert(zoneJson[i].zone_ID);
 
             	var tabs = document.getElementById("tabs");
             	
-            	for(i = 1; i < zoneList.length; i++)
+            	for(i = 1; i < zoneAmount; i++)
             	{
             		var tab = document.createElement("INPUT");
             		tab.type = "button";
@@ -145,7 +152,46 @@ function SessionCheck()
             		})(zone);
             		tabs.appendChild(tab);
             	}
-            	initMap(zoneList[sessionStorage.getItem("zoneNum")]);
+            	var alertMain = document.getElementById("ActiveAlerts");
+            	
+            	for(i = 0; i < alertJson.length; i++)
+            	{
+            		var alertDiv = document.createElement("div");
+            		var infoDiv = document.createElement("div");
+            		var actionDiv = document.createElement("div");
+            		
+            		alertDiv.style.border = "thick solid #0000FF";
+            		infoDiv.style.border = "thick solid #0000FF";
+            		actionDiv.style.border = "thick solid #0000FF";
+            		
+            		alertDiv.appendChild(infoDiv);
+            		alertDiv.appendChild(actionDiv);
+            		
+            		var name = document.createElement("P");
+            		name.innerHTML = alertJson[i].name;
+            		infoDiv.appendChild(name);
+            		
+            		var severity = document.createElement("P");
+            		severity.innerHTML = alertJson[i].severity;
+            		infoDiv.appendChild(severity);
+            		
+            		var speed = document.createElement("P");
+            		speed.innerHTML = alertJson[i].speed;
+            		infoDiv.appendChild(speed);
+            		
+            		var bearing = document.createElement("P");
+            		bearing.innerHTML = alertJson[i].bearing;
+            		infoDiv.appendChild(bearing);
+            		
+            		var action = document.createElement("P");
+            		action.innerHTML = alertJson[i].action;
+            		actionDiv.appendChild(action);
+            		
+            		alertMain.appendChild(alertDiv);
+            		
+            	}
+            	
+            	initMap(currentZone);
             }
             
             
@@ -483,7 +529,7 @@ deleteZoneDiv.index = 1;
 deleteZoneDiv.style['padding-top'] = '10px';
 map.controls[google.maps.ControlPosition.TOP_CENTER].push(deleteZoneDiv);
 //^-----------------------------------------------------------------------------------------------------------------------^//
-//V--------------------------------------------Init Given Shape On Map(Fix to include circles)----------------------------V//
+//V--------------------------------------------Init Given Shape On Map(Fix to show circles as circles)----------------------------V//
 if(sessionStorage.getItem("createZone") === null)
 {
 	sessionStorage.removeItem("createZoneStep2");
@@ -593,16 +639,11 @@ body {
 						</div>
 					</div>
 					<div id="iby5" class="cell">
-						<div id="i75m" class="gpd-text">Active Alerts</div>
+						<div id="ActiveAlerts" class="gpd-text">Active Alerts</div>
 					</div>
 					<div class="cell">
 						<div id="indg" class="gpd-text">Options</div>
-						<form method="post" id="ip8d2" class="form">
-							<button type="submit" id="DeleteZone" onclick="DeleteZone()" class="button">Delete Zone</button>
-							<button type="submit" id="UpdateZone" onclick="UpdateZone()" class="button">Update Zone</button>
-							<div data-form-state="success" id="ivprv" class="state-success">Thanks! We received your request</div>
-							<div data-form-state="error" id="ivz0r" class="state-error">An error occurred on processing your request, try again!</div>
-						</form>
+							<p>Put subZone sliders here</p>
 					</div>
 				</ul>
 			</div>

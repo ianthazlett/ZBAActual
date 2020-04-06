@@ -3,6 +3,7 @@ package team16.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -254,7 +255,7 @@ class RestService {
     }
     
     @GetMapping("/SessionCheck")
-    ReturnZones SessionCheck(@RequestParam String Key)
+    ReturnZone SessionCheck(@RequestParam String Key, @RequestParam int zoneNum)
     {
     	
     	Integer id = Session.get(Key);
@@ -269,9 +270,15 @@ class RestService {
                     "SELECT zone_id AS zone_ID, ST_AsText(zone_loc) AS location FROM zones " + "WHERE user_id = ?",
                     new Object[]{id},
                     new BeanPropertyRowMapper<Zone>(Zone.class));
-    		ReturnZones ret = new ReturnZones();
-    		ret.setZoneList(zoneList);
+    		ReturnZone ret = new ReturnZone();
+    		ret.setZone(zoneList.get(zoneNum));
+    		ret.setZoneAmount(zoneList.size());
     		
+    		//stuff to get the associated alerts
+    		Alert alert = new Alert(0, "test", 50, 50, "severe", "weast", 350, "Perish");
+    		List<Alert> alerts = new ArrayList<Alert>();
+    		alerts.add(alert);
+    		ret.setAlerts(alerts);
     		return ret;
     	}
     }

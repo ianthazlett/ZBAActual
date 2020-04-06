@@ -50,7 +50,15 @@ public class ZbaApplication implements CommandLineRunner{
 		SpringApplication.run(ZbaApplication.class, args);
 	}
 	
-
+	//---------------------------------------------------------------------------------VVVVVVVVVVVVVVVVVVVVVVVVVVVVV-------------------------------------------------------------------------
+	//THINGS TO BE DONE:
+	//Be able to search for ongoing alerts by zone
+		//Junction table between zone and alert
+			//Search for all instances of an alertID and get all associated zones
+			//Search for all instances of an zoneID and get all associated alerts
+	//Compile list of list of alerts in same order as returnZones
+	//Send to front
+	//Hook up with ZoneNum to display list of alerts in alerts tab
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -61,7 +69,7 @@ public class ZbaApplication implements CommandLineRunner{
 		System.out.print(test);*/
 		
 		
-		
+		/*
 		Alert alertOne = new Alert(1, "Thunderstorm", 41.349307, -79.711084, "Severe", "E", 16); //cranberry
 		Alert alertTwo = new Alert(2, "Tornado", 42.112455, -80.063004, "Category 4", "SSE", 30, "Seek cover immediately!"); //erie
 		Alert alertThree = new Alert(3, "Flash Flooding", 41.641134, -80.151444); //meadville
@@ -96,10 +104,10 @@ public class ZbaApplication implements CommandLineRunner{
 			//get email of users with zones containing new alert
 			String userQuery = String.format("SELECT email FROM users JOIN zones ON users.user_id = zones.user_id " 
 					+ "WHERE ST_Contains(zone_loc::geometry, ST_GeomFromText('POINT(%f %f)', 4326))", testAlert.getLongitude(), testAlert.getLatitute());
-			/*
-			UserModel alertUser = (UserModel) jdbcTemplate.queryForObject(
-	                userQuery,
-	                new BeanPropertyRowMapper<UserModel>(UserModel.class));*/
+			
+			//UserModel alertUser = (UserModel) jdbcTemplate.queryForObject(
+	        //        userQuery,
+	        //        new BeanPropertyRowMapper<UserModel>(UserModel.class));
 			
 			List<String> emailList = jdbcTemplate.queryForList(userQuery, String.class);
 			
@@ -107,12 +115,12 @@ public class ZbaApplication implements CommandLineRunner{
 			String zoneQuery = String.format("SELECT zone_id FROM users JOIN zones ON users.user_id = zones.user_id " 
 					+ "WHERE ST_Contains(zone_loc::geometry, ST_GeomFromText('POINT(%f %f)', 4326))", testAlert.getLongitude(), testAlert.getLatitute());
 			
-			/*
-			Zone alertZone = (Zone) jdbcTemplate.queryForObject(
-	                zoneQuery,
-	                new BeanPropertyRowMapper<Zone>(Zone.class));*/
 			
-			List<Integer> zoneList = jdbcTemplate.queryForList(zoneQuery, Integer.class);
+			//Zone alertZone = (Zone) jdbcTemplate.queryForObject(
+	        //       zoneQuery,
+	        //        new BeanPropertyRowMapper<Zone>(Zone.class));
+			//
+			//List<Integer> zoneList = jdbcTemplate.queryForList(zoneQuery, Integer.class);
 			
 			
 			for (int j = 0; j < emailList.size(); j++)
@@ -163,6 +171,7 @@ public class ZbaApplication implements CommandLineRunner{
 			//sleep for 30 seconds
 			Thread.sleep(30000);
 		}//while(true);
-		
+		*/
 	}
+
 }
