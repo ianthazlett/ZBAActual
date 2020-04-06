@@ -76,7 +76,7 @@ function SessionCheck()
     	window.location.href = "http://localhost:8080/login.html";
     }
     
-    if(zoneNum == null)
+    if(zoneNum === null)
 	{
 		sessionStorage.setItem("zoneNum",0);
 	}
@@ -143,39 +143,42 @@ function SessionCheck()
 	        		tabs.appendChild(tab);
 	        	}
 	        	var alertMain = document.getElementById("ActiveAlerts");
-	        	
+        		
 	        	for(i = 0; i < alertJson.length; i++)
 	        	{
 	        		var alertDiv = document.createElement("div");
 	        		var infoDiv = document.createElement("div");
 	        		var actionDiv = document.createElement("div");
 	        		
-	        		alertDiv.style.border = "thick solid #0000FF";
-	        		infoDiv.style.border = "thick solid #0000FF";
-	        		actionDiv.style.border = "thick solid #0000FF";
+	        		alertDiv.style.border = "thin solid #000000";
+	        		infoDiv.style.border = "thin solid #000000";
+	        		actionDiv.style.border = "thin solid #000000";
 	        		
 	        		alertDiv.appendChild(infoDiv);
 	        		alertDiv.appendChild(actionDiv);
 	        		
 	        		var name = document.createElement("P");
-	        		name.innerHTML = alertJson[i].name;
+	        		name.innerHTML = "Type: " + alertJson[i].name;
 	        		infoDiv.appendChild(name);
 	        		
 	        		var severity = document.createElement("P");
-	        		severity.innerHTML = alertJson[i].severity;
+	        		severity.innerHTML = "Severity: " + alertJson[i].severity;
 	        		infoDiv.appendChild(severity);
 	        		
 	        		var speed = document.createElement("P");
-	        		speed.innerHTML = alertJson[i].speed;
+	        		speed.innerHTML = "Speed: " + alertJson[i].speed;
 	        		infoDiv.appendChild(speed);
 	        		
 	        		var bearing = document.createElement("P");
-	        		bearing.innerHTML = alertJson[i].bearing;
+	        		bearing.innerHTML = "Bearing: " + alertJson[i].bearing;
 	        		infoDiv.appendChild(bearing);
 	        		
 	        		var action = document.createElement("P");
-	        		action.innerHTML = alertJson[i].action;
+	        		action.innerHTML = "Recommended action: " + alertJson[i].action;
 	        		actionDiv.appendChild(action);
+	        		
+	        		alertDiv.height = "20%";
+	        		alertDiv.width = "50%";
 	        		
 	        		alertMain.appendChild(alertDiv);
 	        		
