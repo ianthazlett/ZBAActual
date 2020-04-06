@@ -117,8 +117,8 @@ function SessionCheck()
             			}
         
             		var polygonPath = new google.maps.MVCArray(pointArray);
-            		var zone = new Zone(zoneJson.zoneList[i].zoneID, polygonPath);
-            		
+            		var zone = new Zone(zoneJson.zoneList[i].zone_ID, polygonPath);
+            		//alert(zoneJson.zoneList[i].zone_ID);
             		zoneList.push(zone);
             	}
             	
@@ -196,7 +196,7 @@ function UpdateZone(div, map, id)
 			 else//Else is polygon
 			 {
 				 alert("polygon");	 
-				 var Params = "?Path=" + path + "&Key=" + key + "&ID=" + id;
+				 var Params = "?Path=" + path + "&Key=" + key;
 		         var URL_base = "http://localhost:8080/";
 		         var XHR = new XMLHttpRequest();
 		         XHR.open("POST", URL_base + "CreatePolygonZone/" + Params, true);
@@ -273,7 +273,6 @@ function DeleteZone(div, map, id)
         	var token;
    		 	var key = sessionStorage.getItem("sessionKey");
    		 	var id = sessionStorage.getItem("zoneID");
-   		 
    		 	var Params = "?ID=" + id + "&Key=" + key;
             var URL_base = "http://localhost:8080/";
             var XHR = new XMLHttpRequest();
@@ -516,6 +515,8 @@ if(sessionStorage.getItem("createZone") === null)
 	    	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
 	 	}
 	});
+	
+	polygon.setMap(map);
 }
 else
 {
@@ -524,10 +525,6 @@ else
 	sessionStorage.removeItem("zoneID");
 }
 //^-----------------------------------------------------------------------------------------------------------------------^//
-
-polygon.setMap(map);
-
-
 }   
    </script>
 
