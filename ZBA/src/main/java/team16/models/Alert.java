@@ -11,13 +11,17 @@ public class Alert {
 	private int speed;
 	private String action;
 	
+	public Alert()
+	{
+		
+	}
+	
 	public Alert(int id, String name, double lat, double lon)
 	{
 		this.id = id;
 		this.name = name;
 		this.latitute = lat;
 		this.longitude = lon;
-		
 	}
 	
 	public Alert(int id, String name, double lat, double lon, String severity, String action)

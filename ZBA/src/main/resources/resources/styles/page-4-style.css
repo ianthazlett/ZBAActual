@@ -1,10 +1,26 @@
 *{
 	box-sizing: border-box; 
 	} 
+	
+#alertDiv {
+  	width: 500px; 
+	text-align: center;
+}
+	
+#alertInfoDiv {
+	text-align: center;
+}
+	
 body {
 	overflow: auto;
 	margin: 0;
 	}
+	
+p{
+	display: inline-block;
+	margin: 0 auto;
+	padding: 3px;
+}
 #idvb{
 	
 	}

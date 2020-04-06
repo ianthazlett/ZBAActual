@@ -94,8 +94,8 @@ function SessionCheck()
 	    if (this.readyState == 4 && this.status == 200)
 	    {
 	    	var returnJson = this.responseText;
-	    	returnJson = JSON.parse(returnJson);
 	    	//alert(this.responseText);
+	    	returnJson = JSON.parse(returnJson);
 	    	
 	        if(returnJson == null) 
 	        {
@@ -166,7 +166,7 @@ function SessionCheck()
 	        		infoDiv.appendChild(severity);
 	        		
 	        		var speed = document.createElement("P");
-	        		speed.innerHTML = "Speed: " + alertJson[i].speed;
+	        		speed.innerHTML = "Speed: " + alertJson[i].speed + "mph";
 	        		infoDiv.appendChild(speed);
 	        		
 	        		var bearing = document.createElement("P");
@@ -177,8 +177,13 @@ function SessionCheck()
 	        		action.innerHTML = "Recommended action: " + alertJson[i].action;
 	        		actionDiv.appendChild(action);
 	        		
+	        		name.style.border = "thin solid #000000";
+	        		severity.style.border = "thin solid #000000";
+	        		speed.style.border = "thin solid #000000";
+	        		bearing.style.border = "thin solid #000000";
+	        		
 	        		alertDiv.height = "20%";
-	        		alertDiv.width = "50%";
+	        		alertDiv.width = "100%";
 	        		
 	        		alertMain.appendChild(alertDiv);
 	        		
