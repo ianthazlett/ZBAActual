@@ -337,15 +337,11 @@ function CreateZone()
 	sessionStorage.setItem("createZone", "1");
 	window.location.reload(false);
 }
-		 
-	
-
-//window.onload = SessionCheck();
 
 // This example requires the Drawing library. Include the libraries=drawing
 // parameter when you first load the API. For example:
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=drawing">
-function initMap(zone) 
+function initMap(zone)
 {
 	var infowindow = new google.maps.InfoWindow();
  	var map = new google.maps.Map(document.getElementById('map'), 
@@ -570,7 +566,7 @@ function initMap(zone)
 	}
 //^-----------------------------------------------------------------------------------------------------------------------^//
 }   
-   </script>
+</script>
 
 <script
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFe5Q1WDjaCGCTVfdkrC4uMOroI2Y3-ys&libraries=drawing,places&callback=SessionCheck">
@@ -636,12 +632,110 @@ body {
 							<div id="info"></div>
 						</div>
 					</div>
-					<div id="iby5" class="cell">
-						<div id="ActiveAlerts" class="gpd-text">Active Alerts</div>
+					<div id="ActiveAlerts" class="gpd-text">
+						Active Alerts
 					</div>
 					<div class="cell">
-						<div id="indg" class="gpd-text">Options</div>
-							<p>Put subZone sliders here</p>
+						<div id="indg" class="gpd-text">
+							<p>Zone options:</p>
+							
+							
+							<div class="d-flex justify-content-center my-4">
+								<script type="text/javascript">
+									$(document).ready(function() 
+									{
+									  	const $valueSpan = $('.valueSpan2');
+									  	const $value = $('#Periphery1');
+									  	$valueSpan.html($value.val());
+									  	$value.on('input change', () => 
+									  	{
+									    	$valueSpan.html($value.val());
+									  	});
+									});
+								</script>
+								<div class="w-75">
+									<input type="range" class="custom-range" id="Periphery1" min="0" max="200">
+								</div>
+								<span class="font-weight-bold text-primary ml-2 valueSpan2"></span>
+							</div>
+							
+							<div class="d-flex justify-content-center my-4">
+								<script type="text/javascript">
+									$(document).ready(function() 
+									{
+									  	const $valueSpan = $('.valueSpan3');
+									  	const $value = $('#Periphery2');
+									  	$valueSpan.html($value.val());
+									  	$value.on('input change', () => 
+									  	{
+									    	$valueSpan.html($value.val());
+									  	});
+									});
+								</script>
+								<div class="w-75">
+									<input type="range" class="custom-range" id="Periphery2" min="0" max="200">
+								</div>
+								<span class="font-weight-bold text-primary ml-2 valueSpan3"></span>
+							</div>
+							
+							<div class="d-flex justify-content-center my-4">
+								<script type="text/javascript">
+									$(document).ready(function() 
+									{
+									  	const $valueSpan = $('.valueSpan4');
+									  	const $value = $('#Periphery3');
+									  	$valueSpan.html($value.val());
+									  	$value.on('input change', () => 
+									  	{
+									    	$valueSpan.html($value.val());
+									  	});
+									});
+								</script>
+								<div class="w-75">
+									<input type="range" class="custom-range" id="Periphery3" min="0" max="200">
+								</div>
+								<span class="font-weight-bold text-primary ml-2 valueSpan4"></span>
+							</div>
+
+							<div class="d-flex justify-content-center my-4">
+								<script type="text/javascript">
+									$(document).ready(function() 
+									{
+									  	const $valueSpan = $('.valueSpan5');
+									  	const $value = $('#Periphery4');
+									  	$valueSpan.html($value.val());
+									  	$value.on('input change', () => 
+									  	{
+									    	$valueSpan.html($value.val());
+									  	});
+									});
+								</script>
+								<div class="w-75">
+									<input type="range" class="custom-range" id="Periphery4" min="0" max="200">
+								</div>
+								<span class="font-weight-bold text-primary ml-2 valueSpan5"></span>
+							</div>
+
+							<div class="d-flex justify-content-center my-4">
+								<script type="text/javascript">
+									$(document).ready(function() 
+									{
+									  	const $valueSpan = $('.valueSpan6');
+									  	const $value = $('#Periphery5');
+									  	$valueSpan.html($value.val());
+									  	$value.on('input change', () => 
+									  	{
+									    	$valueSpan.html($value.val());
+									  	});
+									});
+								</script>
+								<div class="w-75">
+									<input type="range" class="custom-range" id="Periphery5" min="0" max="200">
+								</div>
+								<span class="font-weight-bold text-primary ml-2 valueSpan6"></span>
+							</div>
+							
+						</div>
 					</div>
 				</ul>
 			</div>
