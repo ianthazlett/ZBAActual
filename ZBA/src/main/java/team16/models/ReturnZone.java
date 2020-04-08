@@ -7,10 +7,12 @@ public class ReturnZone {
 	private Zone zone;
 	private List<Alert> alerts;
 	private int zoneAmount;
+	private boolean admin;
 	
 	public Zone getZone() {
 		return zone;
 	}
+	
 	public void setZone(Zone zone) {
 		this.zone = zone;
 	}
@@ -18,6 +20,7 @@ public class ReturnZone {
 	public List<Alert> getAlerts() {
 		return alerts;
 	}
+	
 	public void setAlerts(List<Alert> alerts) {
 		this.alerts = alerts;
 	}
@@ -25,8 +28,16 @@ public class ReturnZone {
 	public int getZoneAmount() {
 		return zoneAmount;
 	}
+	
 	public void setZoneAmount(int zoneAmount) {
 		this.zoneAmount = zoneAmount;
 	}
-	//different
+	
+	public boolean isAdmin() {
+		return admin;
+	}
+	
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
 }

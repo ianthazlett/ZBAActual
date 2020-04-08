@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -270,7 +271,14 @@ class RestService {
                     "SELECT zone_id AS zone_ID, ST_AsText(zone_loc) AS location FROM zones " + "WHERE user_id = ?",
                     new Object[]{id},
                     new BeanPropertyRowMapper<Zone>(Zone.class));
+    		
+    		List<UserModel> userList = jdbcTemplate.query(
+                    "SELECT admin AS admin FROM users " + "WHERE user_id = ?",
+                    new Object[]{id},
+                    new BeanPropertyRowMapper<UserModel>(UserModel.class));
+
     		ReturnZone ret = new ReturnZone();
+    		ret.setAdmin(userList.get(0).isAdmin());
     		ret.setZone(zoneList.get(zoneNum));
     		ret.setZoneAmount(zoneList.size());
     		
@@ -288,7 +296,51 @@ class RestService {
     		//List<Alert> alerts = new ArrayList<Alert>();
     		//alerts.add(alert);
     		ret.setAlerts(alerts);
+    		
     		return ret;
     	}
     }
+/*---------------------------------------------------------------------------//ToDo: Fix this search, getting ID using email-------------------------------------------------------------
+    @GetMapping("/AdminSearch")
+    String AdminSearch(@RequestParam String Key, @RequestParam String User)
+    {
+    	Integer id = Session.get(Key);
+    	System.out.println(Key);
+    	if(id == null)
+    	{
+    		return null;
+    	}
+    	else
+    	{
+	    	try
+	    	{	//ToDo: Fix this search
+	    		UserModel AdminSearchUser = (UserModel) jdbcTemplate.queryForObject(
+	            "SELECT user_id as ID FROM users " + "WHERE email = ?",
+	            new Object[]{User},
+	            new BeanPropertyRowMapper<UserModel>(UserModel.class));
+	    	
+	    		//https://www.baeldung.com/java-random-string
+	    		String generatedString = "";
+	    		int leftLimit = 97; // letter 'a'
+	    		int rightLimit = 122; // letter 'z'
+	    		int targetStringLength = 20;
+	    		Random random = new Random();
+	    		StringBuilder buffer = new StringBuilder(targetStringLength);
+	    		for (int i = 0; i < targetStringLength; i++) 
+	    		{
+	    			int randomLimitedInt = leftLimit + (int) 
+	    			(random.nextFloat() * (rightLimit - leftLimit + 1));
+	    			buffer.append((char) randomLimitedInt);
+	    		}
+	    		generatedString = buffer.toString();
+	    		Session.put(generatedString, AdminSearchUser.getID());
+	    		return generatedString;
+	    	} 
+	    	catch (EmptyResultDataAccessException e) 
+	    	{
+	    		return "";
+	    	}
+    	}
+    }
+*/
 }

@@ -104,9 +104,17 @@ function SessionCheck()
 	        }
 	        else
 	        {
+	      		var admin = returnJson.admin;
 	        	var zoneJson = returnJson.zone;
 	        	var alertJson = returnJson.alerts;
 	        	var zoneAmount = returnJson.zoneAmount;
+	        	
+	        	if(admin == true)
+	        	{
+	        		document.getElementById("AdminSearchDiv").hidden = false;
+	        		document.getElementById("AdminSearchBar").disabled = false;
+		        	document.getElementById("AdminSearchButton").disabled = false;
+	        	}
 	        	
 	       		var points = zoneJson.location.substring(9, zoneJson.location.length - 3);
 	       		points = points.split(",");
@@ -345,6 +353,38 @@ function CreateZone()
 	sessionStorage.setItem("createZone", "1");
 	window.location.reload(false);
 }
+
+function adminSearch()
+{
+	var user = document.getElementById("AdminSearchBar").innerHTML;
+	var key = sessionStorage.getItem("sessionKey");
+	
+	var Params = "?Key=" + key + "&User=" + user;
+    var URL_base = "http://localhost:8080/";
+    var XHR = new XMLHttpRequest();
+    XHR.open("GET", URL_base + "AdminSearch/" + Params, true);
+    XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    XHR.onreadystatechange = function () 
+    {
+	    if (this.readyState == 4 && this.status == 200)
+	    {
+	    	var sessionKey = this.responseText;
+	    	
+	        if(sessionKey == "") 
+	        {
+	        	alert("Invalid user.");
+	        }
+	        else
+	        {
+	        	sessionStorage.setItem("zoneNum",0);
+	        	sessionStorage.setItem("sessionKey",sessionKey);
+	        	window.location.reload(false);
+	        }    
+	    }
+    }
+    XHR.send();
+}
+
 
 // This example requires the Drawing library. Include the libraries=drawing
 // parameter when you first load the API. For example:
@@ -606,11 +646,11 @@ body {
 					<div id="iec6" class="gpd-text">USERNAME</div>
 					<form method="post" id="ieh9" class="form">
 						<button type="submit" id="i9v94" class="button">Signout</button>
-						<div data-form-state="success" id="i5wab" class="state-success">
-							Thanks! We received your request</div>
-						<div data-form-state="error" id="imrh9" class="state-error">
-							An error occurred on processing your request, try again!</div>
 					</form>
+					<div id="AdminSearchDiv" hidden>
+						<input type="text" id="AdminSearchBar" placeholder="Search for email.." disabled>
+						<button type="button" id="AdminSearchButton" class="button" onClick="adminSearch()" disabled>Submit</button>
+					</div>
 				</div>
 			</div>
 		</div>
