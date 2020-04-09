@@ -230,29 +230,27 @@ function UpdateZone(div, map, id)
 
 		if(id === null)//If a new zone is being created
 		{
+			
 			var thunderstorm = document.getElementById('Periphery1').value;
-            var tornado = document.getElementById('Periphery2').value;
-            var flashFlooding = document.getElementById('Periphery3').value;
-            var winterStorm = document.getElementById('Periphery4').value;
-            var hurricane = document.getElementById('Periphery5').value;
+			 var tornado = document.getElementById('Periphery2').value;
+			 var flashFlooding = document.getElementById('Periphery3').value;
+			 var winterStorm = document.getElementById('Periphery4').value;
+			 var hurricane = document.getElementById('Periphery5').value;
 			
 			if (path.localeCompare("") == 0)//If circle
 			 {
-				 alert("circle");
 				 var point = document.getElementById('center').innerHTML;
 				 var radius = document.getElementById('radius').innerHTML;
-				 var Params = "?Center=" + point + "&Radius=" + radius + "&Key=" + key + "&Thunderstorm=" + thunderstorm 
-						 + "&Tornado=" + tornado + "&FlashFlooding=" + flashFlooding + "&WinterStorm=" + winterStorm + "&Hurricane=" + hurricane;
+				 
+				 var Params = "?Center=" + point + "&Radius=" + radius + "&Key=" + key + "&Thunderstorm=" + thunderstorm + "&Tornado=" + tornado + "&FlashFlooding=" + flashFlooding + "&WinterStorm=" + winterStorm + "&Hurricane=" + hurricane;
 		         var URL_base = "http://localhost:8080/";
 		         var XHR = new XMLHttpRequest();
 		         XHR.open("POST", URL_base + "CreateCircleZone/" + Params, true);
 		         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 			 }
 			 else//Else is polygon
-			 {
-				 alert("polygon");	 
-				 var Params = "?Path=" + path + "&Key=" + key + "&Thunderstorm=" + thunderstorm 
-						 + "&Tornado=" + tornado + "&FlashFlooding=" + flashFlooding + "&WinterStorm=" + winterStorm + "&Hurricane=" + hurricane;
+			 { 
+				 var Params = "?Path=" + path + "&Key=" + key + "&Thunderstorm=" + thunderstorm + "&Tornado=" + tornado + "&FlashFlooding=" + flashFlooding + "&WinterStorm=" + winterStorm + "&Hurricane=" + hurricane;;
 		         var URL_base = "http://localhost:8080/";
 		         var XHR = new XMLHttpRequest();
 		         XHR.open("POST", URL_base + "CreatePolygonZone/" + Params, true);
@@ -261,20 +259,25 @@ function UpdateZone(div, map, id)
 		}
 		else//If a preexisting shape is being edited
 		{
-			var thunderstorm = document.getElementById('Periphery1').value;
-            var tornado = document.getElementById('Periphery2').value;
-            var flashFlooding = document.getElementById('Periphery3').value;
-            var winterStorm = document.getElementById('Periphery4').value;
-            var hurricane = document.getElementById('Periphery5').value;
-			
-			alert("polygon");		 
-			var Params = "?Path=" + path + "&Key=" + key + "&ID=" + id + "&Thunderstorm=" + thunderstorm 
-					+ "&Tornado=" + tornado + "&FlashFlooding=" + flashFlooding + "&WinterStorm=" + winterStorm + "&Hurricane=" + hurricane;
-		    var URL_base = "http://localhost:8080/";
-		    var XHR = new XMLHttpRequest();
-		    XHR.open("PUT", URL_base + "UpdatePolygonZone/" + Params, true);
-		    XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-			 
+			if (path.localeCompare("") == 0)//If circle
+			 {
+				 var point = document.getElementById('center').innerHTML;
+				 var radius = document.getElementById('radius').innerHTML;
+				 
+				 var Params = "?Center=" + point + "&Radius=" + radius + "&Key=" + key + "&ID=" + id + "&Thunderstorm=" + thunderstorm + "&Tornado=" + tornado + "&FlashFlooding=" + flashFlooding + "&WinterStorm=" + winterStorm + "&Hurricane=" + hurricane;;
+		         var URL_base = "http://localhost:8080/";
+		         var XHR = new XMLHttpRequest();
+		         XHR.open("PUT", URL_base + "UpdateCircleZone/" + Params, true);
+		         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			 }
+			 else//Else is polygon
+			 {	 
+				 var Params = "?Path=" + path + "&Key=" + key + "&ID=" + id + "&Thunderstorm=" + thunderstorm + "&Tornado=" + tornado + "&FlashFlooding=" + flashFlooding + "&WinterStorm=" + winterStorm + "&Hurricane=" + hurricane;;
+		         var URL_base = "http://localhost:8080/";
+		         var XHR = new XMLHttpRequest();
+		         XHR.open("PUT", URL_base + "UpdatePolygonZone/" + Params, true);
+		         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			 }
 		}
         XHR.onreadystatechange = function () 
         {
@@ -391,8 +394,30 @@ function adminSearch()
 // This example requires the Drawing library. Include the libraries=drawing
 // parameter when you first load the API. For example:
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=drawing">
+var scaledCircle;
 function initMap(zone)
 {
+	
+	var thunderstorm = document.getElementById('Periphery1').value;
+	var tornado = document.getElementById('Periphery2').value;
+	var flashFlooding = document.getElementById('Periphery3').value;
+	var winterStorm = document.getElementById('Periphery4').value;
+	var hurricane = document.getElementById('Periphery5').value;
+	
+	//https://stackoverflow.com/questions/57160192/how-to-copy-and-scale-a-shape-using-the-google-maps-javascript-api-drawing-libra
+	google.maps.Polygon.prototype.getCenter = function(){
+		  var arr = this.getPath().getArray()
+		  , distX = 0, distY = 0
+		  , len = arr.length
+
+		  arr.forEach(function (element, index) { 
+		    distX+= element.lat()
+		    distY+= element.lng()
+		  });
+
+		  return new google.maps.LatLng(distX/len, distY/len);
+		}
+	
 	var infowindow = new google.maps.InfoWindow();
  	var map = new google.maps.Map(document.getElementById('map'), 
  	{
@@ -500,11 +525,22 @@ function initMap(zone)
 	  	({
 			drawingControl: false
 		});
+		
 	  	for (var i = 0; i < polygon.getPath().getLength(); i++) 
 	  	{
 	     	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
 	  	}
 	  	drawingManager.setOptions({drawingMode: null});
+	  	
+	  	scaledCircle = new google.maps.Circle
+		({
+			center: polygon.getCenter(),
+			editable: false,
+			hidden: false, 
+			map: map,
+			radius: 1000
+		});
+	  	scaledCircle.setMap(map);
 	  	
 	  	google.maps.event.addListener(polygon.getPath(), 'insert_at', function() 
 	  	{
@@ -513,6 +549,7 @@ function initMap(zone)
 		  	{
 		     	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
 		  	}
+	  		scaledCircle.center = polygon.getCenter();
 	  	});
 	  	google.maps.event.addListener(polygon.getPath(), 'set_at', function() 
 	  	{
@@ -521,6 +558,7 @@ function initMap(zone)
 		  	{
 		     	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
 		  	}
+	  		scaledCircle.center = polygon.getCenter();
 	  	});
 	});
 //^-----------------------------------------------------------------------------------------------------------------------^//
@@ -538,6 +576,16 @@ function initMap(zone)
 		document.getElementById('radius').innerHTML = circle.getRadius();
 		drawingManager.setOptions({drawingMode: null});
 		
+		scaledCircle = new google.maps.Circle
+		({
+			center: polygon.getCenter(),
+			editable: false,
+			hidden: false, 
+			map: map,
+			radius: 100
+		});
+		scaledCircle.setMap(map);
+		
 		google.maps.event.addListener(circle,'radius_changed',function()
 		{
 			if (this.getRadius() > 10000) 
@@ -550,6 +598,7 @@ function initMap(zone)
 		google.maps.event.addListener(circle,'center_changed',function()
 		{
 			document.getElementById('center').innerHTML = circle.getCenter();
+			scaledCircle.center = circle.getCenter();
 		});
 	});
 //^-----------------------------------------------------------------------------------------------------------------------^//
@@ -588,10 +637,50 @@ function initMap(zone)
 			});
 		
 		document.getElementById('path').innerHTML = "";
-        for (var i = 0; i < polygon.getPath().getLength(); i++) 
-        {
-           document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
-        }
+  		for (var i = 0; i < polygon.getPath().getLength(); i++) 
+	  	{
+	     	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
+	  	}
+  		scaledCircle = new google.maps.Circle
+		({
+			center: polygon.getCenter(),
+			editable: false,
+			hidden: false, 
+			map: map,
+			radius: 1000
+		});
+  		
+  		var thunderstorm = document.getElementById('Periphery1');
+		var tornado = document.getElementById('Periphery2');
+		var flashFlooding = document.getElementById('Periphery3');
+		var winterStorm = document.getElementById('Periphery4');
+		var hurricane = document.getElementById('Periphery5');
+  		
+  		google.maps.event.addDomListener(thunderstorm, "change", function() 
+  		{
+  			alert(parseInt(thunderstorm.value));
+  		    scaledCircle.setRadius(parseInt(thunderstorm.value));
+  		});
+  		
+  		google.maps.event.addDomListener(tornado, "change", function() 
+  		{
+  			scaledCircle.setRadius(parseInt(tornado.value));
+  		});
+  		
+  		google.maps.event.addDomListener(flashFlooding, "change", function() 
+  		{
+  			scaledCircle.setRadius(parseInt(flashFlooding.value));
+  		});
+  		
+  		google.maps.event.addDomListener(winterStorm, "change", function() 
+  		{
+  			scaledCircle.setRadius(parseInt(winterStorm.value));
+  		});
+  		
+  		google.maps.event.addDomListener(hurricane, "change", function() 
+  		{
+  			scaledCircle.setRadius(parseInt(hurricane.value));
+  		});
 		
 		sessionStorage.setItem("zoneID", zone.zoneID);
 		
@@ -602,6 +691,7 @@ function initMap(zone)
 		 	{
 		    	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
 		 	}
+			scaledCircle.center = polygon.getCenter();
 		});
 		google.maps.event.addListener(polygon.getPath(), 'set_at', function() 
 		{
@@ -610,9 +700,11 @@ function initMap(zone)
 		 	{
 		    	document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
 		 	}
+			scaledCircle.center = polygon.getCenter();
 		});
 		
 		polygon.setMap(map);
+		scaledCircle.setMap(map);
 	}
 	else
 	{
@@ -695,7 +787,6 @@ body {
 						<div id="indg" class="gpd-text">
 							<p>Zone options:</p>
 							
-							
 							<div class="d-flex justify-content-center my-4">
 								<script type="text/javascript">
 									$(document).ready(function() 
@@ -710,8 +801,9 @@ body {
 									});
 								</script>
 								<div class="w-75">
-									<input type="range" class="custom-range" id="Periphery1" min="0" max="200">
+									<input type="range" class="custom-range" id="Periphery1" min="0" max="20000">
 								</div>
+								<span>Thunderstorm: </span>
 								<span class="font-weight-bold text-primary ml-2 valueSpan2"></span>
 							</div>
 							
@@ -729,8 +821,9 @@ body {
 									});
 								</script>
 								<div class="w-75">
-									<input type="range" class="custom-range" id="Periphery2" min="0" max="200">
+									<input type="range" class="custom-range" id="Periphery2" min="0" max="20000">
 								</div>
+								<span>Tornado: </span>
 								<span class="font-weight-bold text-primary ml-2 valueSpan3"></span>
 							</div>
 							
@@ -748,8 +841,9 @@ body {
 									});
 								</script>
 								<div class="w-75">
-									<input type="range" class="custom-range" id="Periphery3" min="0" max="200">
+									<input type="range" class="custom-range" id="Periphery3" min="0" max="20000">
 								</div>
+								<span>Flash Flooding: </span>
 								<span class="font-weight-bold text-primary ml-2 valueSpan4"></span>
 							</div>
 
@@ -767,8 +861,9 @@ body {
 									});
 								</script>
 								<div class="w-75">
-									<input type="range" class="custom-range" id="Periphery4" min="0" max="200">
+									<input type="range" class="custom-range" id="Periphery4" min="0" max="20000">
 								</div>
+								<span>Winter Storm: </span>
 								<span class="font-weight-bold text-primary ml-2 valueSpan5"></span>
 							</div>
 
@@ -786,8 +881,9 @@ body {
 									});
 								</script>
 								<div class="w-75">
-									<input type="range" class="custom-range" id="Periphery5" min="0" max="200">
+									<input type="range" class="custom-range" id="Periphery5" min="0" max="20000">
 								</div>
+								<span>Hurricane: </span>
 								<span class="font-weight-bold text-primary ml-2 valueSpan6"></span>
 							</div>
 							
