@@ -230,12 +230,19 @@ function UpdateZone(div, map, id)
 
 		if(id === null)//If a new zone is being created
 		{
+			var thunderstorm = document.getElementById('Periphery1').value;
+            var tornado = document.getElementById('Periphery2').value;
+            var flashFlooding = document.getElementById('Periphery3').value;
+            var winterStorm = document.getElementById('Periphery4').value;
+            var hurricane = document.getElementById('Periphery5').value;
+			
 			if (path.localeCompare("") == 0)//If circle
 			 {
 				 alert("circle");
 				 var point = document.getElementById('center').innerHTML;
 				 var radius = document.getElementById('radius').innerHTML;
-				 var Params = "?Center=" + point + "&Radius=" + radius + "&Key=" + key;
+				 var Params = "?Center=" + point + "&Radius=" + radius + "&Key=" + key + "&Thunderstorm=" + thunderstorm 
+						 + "&Tornado=" + tornado + "&FlashFlooding=" + flashFlooding + "&WinterStorm=" + winterStorm + "&Hurricane=" + hurricane;
 		         var URL_base = "http://localhost:8080/";
 		         var XHR = new XMLHttpRequest();
 		         XHR.open("POST", URL_base + "CreateCircleZone/" + Params, true);
@@ -244,7 +251,8 @@ function UpdateZone(div, map, id)
 			 else//Else is polygon
 			 {
 				 alert("polygon");	 
-				 var Params = "?Path=" + path + "&Key=" + key;
+				 var Params = "?Path=" + path + "&Key=" + key + "&Thunderstorm=" + thunderstorm 
+						 + "&Tornado=" + tornado + "&FlashFlooding=" + flashFlooding + "&WinterStorm=" + winterStorm + "&Hurricane=" + hurricane;
 		         var URL_base = "http://localhost:8080/";
 		         var XHR = new XMLHttpRequest();
 		         XHR.open("POST", URL_base + "CreatePolygonZone/" + Params, true);
@@ -253,26 +261,20 @@ function UpdateZone(div, map, id)
 		}
 		else//If a preexisting shape is being edited
 		{
-			if (path.localeCompare("") == 0)//If circle
-			 {
-				 alert("circle");
-				 var point = document.getElementById('center').innerHTML;
-				 var radius = document.getElementById('radius').innerHTML;
-				 var Params = "?Center=" + point + "&Radius=" + radius + "&Key=" + key + "&ID=" + id;
-		         var URL_base = "http://localhost:8080/";
-		         var XHR = new XMLHttpRequest();
-		         XHR.open("PUT", URL_base + "UpdateCircleZone/" + Params, true);
-		         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-			 }
-			 else//Else is polygon
-			 {
-				 alert("polygon");		 
-				 var Params = "?Path=" + path + "&Key=" + key + "&ID=" + id;
-		         var URL_base = "http://localhost:8080/";
-		         var XHR = new XMLHttpRequest();
-		         XHR.open("PUT", URL_base + "UpdatePolygonZone/" + Params, true);
-		         XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-			 }
+			var thunderstorm = document.getElementById('Periphery1').value;
+            var tornado = document.getElementById('Periphery2').value;
+            var flashFlooding = document.getElementById('Periphery3').value;
+            var winterStorm = document.getElementById('Periphery4').value;
+            var hurricane = document.getElementById('Periphery5').value;
+			
+			alert("polygon");		 
+			var Params = "?Path=" + path + "&Key=" + key + "&ID=" + id + "&Thunderstorm=" + thunderstorm 
+					+ "&Tornado=" + tornado + "&FlashFlooding=" + flashFlooding + "&WinterStorm=" + winterStorm + "&Hurricane=" + hurricane;
+		    var URL_base = "http://localhost:8080/";
+		    var XHR = new XMLHttpRequest();
+		    XHR.open("PUT", URL_base + "UpdatePolygonZone/" + Params, true);
+		    XHR.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			 
 		}
         XHR.onreadystatechange = function () 
         {
@@ -356,7 +358,7 @@ function CreateZone()
 
 function adminSearch()
 {
-	var user = document.getElementById("AdminSearchBar").innerHTML;
+	var user = document.getElementById("AdminSearchBar").value;
 	var key = sessionStorage.getItem("sessionKey");
 	
 	var Params = "?Key=" + key + "&User=" + user;
@@ -584,6 +586,12 @@ function initMap(zone)
 			({
 				drawingControl: false
 			});
+		
+		document.getElementById('path').innerHTML = "";
+        for (var i = 0; i < polygon.getPath().getLength(); i++) 
+        {
+           document.getElementById('path').innerHTML += polygon.getPath().getAt(i).toUrlValue(6) + ",";
+        }
 		
 		sessionStorage.setItem("zoneID", zone.zoneID);
 		

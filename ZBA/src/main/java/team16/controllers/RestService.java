@@ -100,7 +100,8 @@ class RestService {
     }
 
     @PostMapping("/CreateCircleZone")
-    String createCircleZone(@RequestParam String Center, @RequestParam String Radius, @RequestParam String Key)
+    String createCircleZone(@RequestParam String Center, @RequestParam String Radius, @RequestParam String Key,
+    		@RequestParam int Thunderstorm, @RequestParam int Tornado, @RequestParam int FlashFlooding, @RequestParam int WinterStorm, @RequestParam int Hurricane)
     {
     	Integer id = Session.get(Key);
     	if(id == null)
@@ -120,8 +121,9 @@ class RestService {
     		double lng = Double.parseDouble(stringList[1]);
     		double radius = Double.parseDouble(Radius);
     		
-    		String insertZoneQuery = String.format("INSERT INTO zones (user_id, zone_loc) " 
-    				+ "VALUES (%d, ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT(%f %f)',4326),3857),%f,'quad_segs=8'),4326))", id, lng, lat, radius);
+    		String insertZoneQuery = String.format("INSERT INTO zones (user_id, zone_loc, flooding_mod, hurricane_mod, thunderstorm_mod, tornado_mod, winter_storm_mod) " 
+    				+ "VALUES (%d, ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT(%f %f)',4326),3857),%f,'quad_segs=8'),4326), %d, %d, %d, %d, %d)"
+    				, id, lng, lat, radius, FlashFlooding, Hurricane, Thunderstorm, Tornado, WinterStorm);
     		
     		jdbcTemplate.update(insertZoneQuery);
     		return "Complete";
@@ -130,7 +132,8 @@ class RestService {
     }
     
     @PostMapping("/CreatePolygonZone")
-    String createPolygonZone(@RequestParam String Path, @RequestParam String Key)
+    String createPolygonZone(@RequestParam String Path, @RequestParam String Key,
+    		@RequestParam int Thunderstorm, @RequestParam int Tornado, @RequestParam int FlashFlooding, @RequestParam int WinterStorm, @RequestParam int Hurricane)
     {
     	Integer id = Session.get(Key);
     	if(id == null)
@@ -162,8 +165,8 @@ class RestService {
     		
     		polygonPath = polygonPath.substring(0, polygonPath.length() - 1);
     		
-    		String insertZoneQuery = String.format("INSERT INTO zones (user_id, zone_loc)"
-    				+ "VALUES (%d, ST_GeomFromText('POLYGON((%s))',4326))", id, polygonPath);
+    		String insertZoneQuery = String.format("INSERT INTO zones (user_id, zone_loc, flooding_mod, hurricane_mod, thunderstorm_mod, tornado_mod, winter_storm_mod)"
+    				+ "VALUES (%d, ST_GeomFromText('POLYGON((%s))',4326), %d, %d, %d, %d, %d)", id, polygonPath, FlashFlooding, Hurricane, Thunderstorm, Tornado, WinterStorm);
     		
     		jdbcTemplate.update(insertZoneQuery);
     		return "Complete";
@@ -171,7 +174,8 @@ class RestService {
     }
     
     @PutMapping("/UpdateCircleZone")
-    String updateCircleZone(@RequestParam String Center, @RequestParam String Radius, @RequestParam String Key,  @RequestParam int ID)
+    String updateCircleZone(@RequestParam String Center, @RequestParam String Radius, @RequestParam String Key, @RequestParam int ID,
+    		@RequestParam int Thunderstorm, @RequestParam int Tornado, @RequestParam int FlashFlooding, @RequestParam int WinterStorm, @RequestParam int Hurricane)
     {
     	Integer id = Session.get(Key);
     	if(id == null)
@@ -188,7 +192,13 @@ class RestService {
     		double lng = Double.parseDouble(stringList[1]);
     		double radius = Double.parseDouble(Radius);
     		
-    		String updateQuery = String.format("UPDATE zones SET zone_loc = ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT( %f %f )', 4326), 3857), %f, 'quad_segs=8'), 4326) WHERE zone_id = %d", lng, lat, radius, ID);
+    		String updateQuery = String.format("UPDATE zones SET zone_loc = ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT( %f %f )', 4326), 3857), %f, 'quad_segs=8'), 4326),"
+    				+ " flooding_mod = %d,"
+    				+ " hurricane_mod = %d,"
+    				+ " thunderstorm_mod = %d,"
+    				+ " tornado_mod = %d,"
+    				+ " winter_storm_mod = %d"
+    				+ " WHERE zone_id = %d", lng, lat, radius, FlashFlooding, Hurricane, Thunderstorm, Tornado, WinterStorm, ID);
     		System.out.println(updateQuery);
     		
     		jdbcTemplate.update(updateQuery);
@@ -197,7 +207,8 @@ class RestService {
     }
     
     @PutMapping("/UpdatePolygonZone")
-    String updatePolygonZone(@RequestParam String Path, @RequestParam String Key,  @RequestParam int ID)
+    String updatePolygonZone(@RequestParam String Path, @RequestParam String Key, @RequestParam int ID,
+    		@RequestParam int Thunderstorm, @RequestParam int Tornado, @RequestParam int FlashFlooding, @RequestParam int WinterStorm, @RequestParam int Hurricane)
     {
     	//System.out.println(Path);
     	Integer id = Session.get(Key);
@@ -228,7 +239,13 @@ class RestService {
     		
     		polygonPath = polygonPath.substring(0, polygonPath.length() - 1);
     		
-    		String updateQuery = String.format("UPDATE zones SET zone_loc = ST_GeomFromText('POLYGON((%s))',4326) WHERE zone_id = %d", polygonPath, ID);
+    		String updateQuery = String.format("UPDATE zones SET zone_loc = ST_GeomFromText('POLYGON((%s))',4326),"
+    				+ " flooding_mod = %d,"
+    				+ " hurricane_mod = %d,"
+    				+ " thunderstorm_mod = %d,"
+    				+ " tornado_mod = %d,"
+    				+ " winter_storm_mod = %d"
+    				+ "WHERE zone_id = %d", polygonPath, FlashFlooding, Hurricane, Thunderstorm, Tornado, WinterStorm, ID);
     		
     		jdbcTemplate.update(updateQuery);
     		return "Complete";
@@ -300,7 +317,7 @@ class RestService {
     		return ret;
     	}
     }
-/*---------------------------------------------------------------------------//ToDo: Fix this search, getting ID using email-------------------------------------------------------------
+
     @GetMapping("/AdminSearch")
     String AdminSearch(@RequestParam String Key, @RequestParam String User)
     {
@@ -314,9 +331,11 @@ class RestService {
     	{
 	    	try
 	    	{	//ToDo: Fix this search
-	    		UserModel AdminSearchUser = (UserModel) jdbcTemplate.queryForObject(
-	            "SELECT user_id as ID FROM users " + "WHERE email = ?",
-	            new Object[]{User},
+	    		
+	    		String adminQuery = String.format("SELECT user_id as ID FROM users WHERE email = '%s'", User);
+	    		
+	    		UserModel adminSearchUser = (UserModel) jdbcTemplate.queryForObject(
+	            adminQuery,
 	            new BeanPropertyRowMapper<UserModel>(UserModel.class));
 	    	
 	    		//https://www.baeldung.com/java-random-string
@@ -333,7 +352,8 @@ class RestService {
 	    			buffer.append((char) randomLimitedInt);
 	    		}
 	    		generatedString = buffer.toString();
-	    		Session.put(generatedString, AdminSearchUser.getID());
+	    		Session.put(generatedString, adminSearchUser.getID());
+	    		Session.remove(Key);
 	    		return generatedString;
 	    	} 
 	    	catch (EmptyResultDataAccessException e) 
@@ -342,5 +362,5 @@ class RestService {
 	    	}
     	}
     }
-*/
+
 }
