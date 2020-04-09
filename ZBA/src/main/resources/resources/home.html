@@ -52,10 +52,16 @@
 var zoneList = [];
 class Zone
 {
-	constructor(ID, path)
+	constructor(ID, path, tornado, hurricane, thunderstorm, winter_storm, flash_flooding)
 	{
 		this.zoneID = ID;
 		this.polygonPath = path;
+		this.tornado = tornado;
+		this.hurricane = hurricane;
+		this.thunderstorm = thunderstorm;
+		this.winter_storm = winter_storm;
+		this.flash_flooding = flash_flooding;
+		
 	}
 }
 
@@ -76,9 +82,10 @@ function SessionCheck()
     	window.location.href = "http://localhost:8080/login.html";
     }
     
-    if(zoneNum === null)
+    if(zoneNum == null)
 	{
 		sessionStorage.setItem("zoneNum",0);
+		zoneNum = 0;
 	}
 
     var token;
@@ -129,7 +136,7 @@ function SessionCheck()
 	       			}
 	   
 	       		var polygonPath = new google.maps.MVCArray(pointArray);
-	       		var currentZone = new Zone(zoneJson.zone_ID, polygonPath);
+	       		var currentZone = new Zone(zoneJson.zone_ID, polygonPath, zoneJson.tornado, zoneJson.hurricane, zoneJson.thunderstorm, zoneJson.winter_Storm, zoneJson.flash_Flooding);
 	       		//alert(zoneJson[i].zone_ID);
 	
 	        	var tabs = document.getElementById("tabs");
@@ -227,15 +234,17 @@ function UpdateZone(div, map, id)
 		var key = sessionStorage.getItem("sessionKey");
 		var path = document.getElementById('path').innerHTML;
 		var id = sessionStorage.getItem("zoneID");
+		
+		var thunderstorm = parseInt(document.getElementById('Periphery1').value);
+        var tornado = parseInt(document.getElementById('Periphery2').value);
+        var flashFlooding = parseInt(document.getElementById('Periphery3').value);
+        var winterStorm = parseInt(document.getElementById('Periphery4').value);
+        var hurricane = parseInt(document.getElementById('Periphery5').value);
+
+        alert(thunderstorm);
 
 		if(id === null)//If a new zone is being created
 		{
-			
-			var thunderstorm = document.getElementById('Periphery1').value;
-			 var tornado = document.getElementById('Periphery2').value;
-			 var flashFlooding = document.getElementById('Periphery3').value;
-			 var winterStorm = document.getElementById('Periphery4').value;
-			 var hurricane = document.getElementById('Periphery5').value;
 			
 			if (path.localeCompare("") == 0)//If circle
 			 {
@@ -347,6 +356,8 @@ function DeleteZone(div, map, id)
            	}
         }
         XHR.send();
+
+        sessionStorage.setItem("zoneNum",0);
         window.location.reload(false);  
         } 
     else {}
@@ -655,6 +666,30 @@ function initMap(zone)
 		var flashFlooding = document.getElementById('Periphery3');
 		var winterStorm = document.getElementById('Periphery4');
 		var hurricane = document.getElementById('Periphery5');
+		
+		var thunderstormSpanNumber = document.getElementById('ThunderstormSpanNumber');
+		var tornadoSpanNumber = document.getElementById('TornadoSpanNumber');
+		var flashFloodingSpanNumber = document.getElementById('FlashFloodingSpanNumber');
+		var winterStormSpanNumber = document.getElementById('WinterStormSpanNumber');
+		var hurricaneSpanNumber = document.getElementById('HurricaneSpanNumber');
+		
+		thunderstorm.value = zone.thunderstorm;
+        tornado.value = zone.tornado;
+        flashFlooding.value = zone.flash_flooding;
+        winterStorm.value = zone.winter_storm;
+        hurricane.value = zone.hurricane;
+        
+        thunderstormSpanNumber.innerHTML = zone.thunderstorm;
+        tornadoSpanNumber.innerHTML = zone.tornado;
+        flashFloodingSpanNumber.innerHTML = zone.flash_flooding;
+        winterStormSpanNumber.innerHTML = zone.winter_storm;
+        hurricaneSpanNumber.innerHTML = zone.hurricane;
+        
+        //alert(zone.tornado);
+        //alert(zone.hurricane);
+        //alert(zone.thunderstorm);
+        //alert(zone.winter_storm);
+        //alert(zone.flash_flooding);
   		
   		google.maps.event.addDomListener(thunderstorm, "change", function() 
   		{
@@ -800,11 +835,14 @@ body {
 									  	});
 									});
 								</script>
-								<div class="w-75">
-									<input type="range" class="custom-range" id="Periphery1" min="0" max="20000">
-								</div>
 								<span>Thunderstorm: </span>
-								<span class="font-weight-bold text-primary ml-2 valueSpan2"></span>
+								<div class="w-75">
+									
+									<input type="range" class="custom-range" id="Periphery1" min="0" max="100000">
+									<span id="ThunderstormSpanNumber" class="font-weight-bold text-primary ml-2 valueSpan2"></span>
+								</div>
+								
+								
 							</div>
 							
 							<div class="d-flex justify-content-center my-4">
@@ -820,11 +858,13 @@ body {
 									  	});
 									});
 								</script>
-								<div class="w-75">
-									<input type="range" class="custom-range" id="Periphery2" min="0" max="20000">
-								</div>
 								<span>Tornado: </span>
-								<span class="font-weight-bold text-primary ml-2 valueSpan3"></span>
+								<div class="w-75">
+									<input type="range" class="custom-range" id="Periphery2" min="0" max="100000">
+									<span id="TornadoSpanNumber" class="font-weight-bold text-primary ml-2 valueSpan3"></span>
+								</div>
+								
+								
 							</div>
 							
 							<div class="d-flex justify-content-center my-4">
@@ -840,11 +880,13 @@ body {
 									  	});
 									});
 								</script>
-								<div class="w-75">
-									<input type="range" class="custom-range" id="Periphery3" min="0" max="20000">
-								</div>
 								<span>Flash Flooding: </span>
-								<span class="font-weight-bold text-primary ml-2 valueSpan4"></span>
+								<div class="w-75">
+									<input type="range" class="custom-range" id="Periphery3" min="0" max="100000">
+									<span id="FlashFloodingSpanNumber" class="font-weight-bold text-primary ml-2 valueSpan4"></span>
+								</div>
+								
+								
 							</div>
 
 							<div class="d-flex justify-content-center my-4">
@@ -860,11 +902,13 @@ body {
 									  	});
 									});
 								</script>
-								<div class="w-75">
-									<input type="range" class="custom-range" id="Periphery4" min="0" max="20000">
-								</div>
 								<span>Winter Storm: </span>
-								<span class="font-weight-bold text-primary ml-2 valueSpan5"></span>
+								<div class="w-75">
+									<input type="range" class="custom-range" id="Periphery4" min="0" max="100000">
+									<span id="WinterStormSpanNumber" class="font-weight-bold text-primary ml-2 valueSpan5"></span>
+								</div>
+								
+								
 							</div>
 
 							<div class="d-flex justify-content-center my-4">
@@ -880,11 +924,13 @@ body {
 									  	});
 									});
 								</script>
-								<div class="w-75">
-									<input type="range" class="custom-range" id="Periphery5" min="0" max="20000">
-								</div>
 								<span>Hurricane: </span>
-								<span class="font-weight-bold text-primary ml-2 valueSpan6"></span>
+								<div class="w-75">
+									<input type="range" class="custom-range" id="Periphery5" min="0" max="100000">
+									<span id="HurricaneSpanNumber" class="font-weight-bold text-primary ml-2 valueSpan6"></span>
+								</div>
+								
+								
 							</div>
 							
 						</div>

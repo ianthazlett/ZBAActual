@@ -121,7 +121,7 @@ class RestService {
     		double lng = Double.parseDouble(stringList[1]);
     		double radius = Double.parseDouble(Radius);
     		
-    		String insertZoneQuery = String.format("INSERT INTO zones (user_id, zone_loc, flooding_mod, hurricane_mod, thunderstorm_mod, tornado_mod, winter_storm_mod) " 
+    		String insertZoneQuery = String.format("INSERT INTO zones (user_id, zone_loc, flash_Flooding, hurricane, thunderstorm, tornado, winter_Storm) " 
     				+ "VALUES (%d, ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT(%f %f)',4326),3857),%f,'quad_segs=8'),4326), %d, %d, %d, %d, %d)"
     				, id, lng, lat, radius, FlashFlooding, Hurricane, Thunderstorm, Tornado, WinterStorm);
     		
@@ -165,7 +165,7 @@ class RestService {
     		
     		polygonPath = polygonPath.substring(0, polygonPath.length() - 1);
     		
-    		String insertZoneQuery = String.format("INSERT INTO zones (user_id, zone_loc, flooding_mod, hurricane_mod, thunderstorm_mod, tornado_mod, winter_storm_mod)"
+    		String insertZoneQuery = String.format("INSERT INTO zones (user_id, zone_loc, flash_Flooding, hurricane, thunderstorm, tornado, winter_Storm)"
     				+ "VALUES (%d, ST_GeomFromText('POLYGON((%s))',4326), %d, %d, %d, %d, %d)", id, polygonPath, FlashFlooding, Hurricane, Thunderstorm, Tornado, WinterStorm);
     		
     		jdbcTemplate.update(insertZoneQuery);
@@ -193,11 +193,11 @@ class RestService {
     		double radius = Double.parseDouble(Radius);
     		
     		String updateQuery = String.format("UPDATE zones SET zone_loc = ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT( %f %f )', 4326), 3857), %f, 'quad_segs=8'), 4326),"
-    				+ " flooding_mod = %d,"
-    				+ " hurricane_mod = %d,"
-    				+ " thunderstorm_mod = %d,"
-    				+ " tornado_mod = %d,"
-    				+ " winter_storm_mod = %d"
+    				+ " flash_Flooding = %d,"
+    				+ " hurricane = %d,"
+    				+ " thunderstorm = %d,"
+    				+ " tornado = %d,"
+    				+ " winter_Storm = %d"
     				+ " WHERE zone_id = %d", lng, lat, radius, FlashFlooding, Hurricane, Thunderstorm, Tornado, WinterStorm, ID);
     		System.out.println(updateQuery);
     		
@@ -240,11 +240,11 @@ class RestService {
     		polygonPath = polygonPath.substring(0, polygonPath.length() - 1);
     		
     		String updateQuery = String.format("UPDATE zones SET zone_loc = ST_GeomFromText('POLYGON((%s))',4326),"
-    				+ " flooding_mod = %d,"
-    				+ " hurricane_mod = %d,"
-    				+ " thunderstorm_mod = %d,"
-    				+ " tornado_mod = %d,"
-    				+ " winter_storm_mod = %d"
+    				+ " flash_Flooding = %d,"
+    				+ " hurricane = %d,"
+    				+ " thunderstorm = %d,"
+    				+ " tornado = %d,"
+    				+ " winter_Storm = %d"
     				+ "WHERE zone_id = %d", polygonPath, FlashFlooding, Hurricane, Thunderstorm, Tornado, WinterStorm, ID);
     		
     		jdbcTemplate.update(updateQuery);
@@ -285,7 +285,7 @@ class RestService {
     	else
     	{
     		List<Zone> zoneList = jdbcTemplate.query(
-                    "SELECT zone_id AS zone_ID, ST_AsText(zone_loc) AS location FROM zones " + "WHERE user_id = ?",
+                    "SELECT zone_id AS zone_ID, ST_AsText(zone_loc) AS location, tornado, hurricane, thunderstorm, winter_storm, flash_flooding FROM zones " + "WHERE user_id = ?",
                     new Object[]{id},
                     new BeanPropertyRowMapper<Zone>(Zone.class));
     		
