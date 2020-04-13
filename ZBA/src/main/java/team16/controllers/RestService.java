@@ -91,10 +91,23 @@ class RestService {
     	}
     	catch (EmptyResultDataAccessException e) 
     	{
+    		//insert new user into database
     		jdbcTemplate.update(
                 "insert into users (email, password, address, admin) values(?,?,?,?)",
                 email, password, address, false);
+    		
+    		//get user_id of new user
+    		String newUserQuery = "SELECT MAX(user_id) FROM users";
+    		int userID = jdbcTemplate.queryForObject(newUserQuery, Integer.class);
+    		
+    		//insert default zone for new user
+    		jdbcTemplate.update("INSERT INTO zones (user_id, zone_loc) " 
+    				+ "VALUES (?, ST_Transform(ST_Buffer(ST_Transform(ST_GeomFromText('POINT(-80.046176 42.109617 )',4326),3857),5000,'quad_segs=8'),4326)", userID);
+    		
+    		
     		return "Complete";
+    		
+    		
     	}
     
     }
