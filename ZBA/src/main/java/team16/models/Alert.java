@@ -1,5 +1,8 @@
 package team16.models;
 
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+
 public class Alert {
 	
 	private int id;
@@ -10,21 +13,23 @@ public class Alert {
 	private String bearing;
 	private int speed;
 	private String action;
+	private LocalDateTime expire;
 	
 	public Alert()
 	{
 		
 	}
 	
-	public Alert(int id, String name, double lat, double lon)
+	public Alert(int id, String name, double lat, double lon, LocalDateTime expire)
 	{
 		this.id = id;
 		this.name = name;
 		this.latitute = lat;
 		this.longitude = lon;
+		this.expire = expire;
 	}
 	
-	public Alert(int id, String name, double lat, double lon, String severity, String action)
+	public Alert(int id, String name, double lat, double lon, String severity, String action, LocalDateTime expire)
 	{
 		this.id = id;
 		this.name = name;
@@ -32,9 +37,10 @@ public class Alert {
 		this.longitude = lon;
 		this.severity = severity;
 		this.action = action;
+		this.expire = expire;
 	}
 	
-	public Alert(int id, String name, double lat, double lon, String severity, String bearing, int speed)
+	public Alert(int id, String name, double lat, double lon, String severity, String bearing, int speed, LocalDateTime expire)
 	{
 		this.id = id;
 		this.name = name;
@@ -43,9 +49,10 @@ public class Alert {
 		this.severity = severity;
 		this.bearing = bearing;
 		this.speed = speed;
+		this.expire = expire;
 	}
 	
-	public Alert(int id, String name, double lat, double lon, String severity, String bearing, int speed, String action)
+	public Alert(int id, String name, double lat, double lon, String severity, String bearing, int speed, String action, LocalDateTime expire)
 	{
 		this.id = id;
 		this.name = name;
@@ -55,6 +62,7 @@ public class Alert {
 		this.bearing = bearing;
 		this.speed = speed;
 		this.action = action;
+		this.expire = expire;
 	}
 	
 	
@@ -124,6 +132,14 @@ public class Alert {
 
 	public void setAction(String action) {
 		this.action = action;
+	}
+
+	public LocalDateTime getExpire() {
+		return expire;
+	}
+
+	public void setExpire(LocalDateTime expire) {
+		this.expire = expire;
 	}
 	
 

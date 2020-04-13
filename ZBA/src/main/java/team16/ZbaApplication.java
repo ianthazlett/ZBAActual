@@ -34,6 +34,10 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
 
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.time.Month;
+
 import team16.models.UserModel;
 
 @SpringBootApplication
@@ -68,13 +72,13 @@ public class ZbaApplication implements CommandLineRunner{
 		int test = jdbcTemplate.update("INSERT INTO users(email, password, address, admin) VALUES(?,?,?,?)", params, types);	
 		System.out.print(test);*/
 		
+		LocalDateTime aDateTime = LocalDateTime.of(2020, Month.APRIL, 13, 20, 00, 00);
 		
-		/*
-		Alert alertOne = new Alert(1, "Thunderstorm", 41.349307, -79.711084, "Severe", "E", 16); //cranberry
-		Alert alertTwo = new Alert(2, "Tornado", 42.112455, -80.063004, "Category 4", "SSE", 30, "Seek cover immediately!"); //erie
-		Alert alertThree = new Alert(3, "Flash Flooding", 41.641134, -80.151444); //meadville
-		Alert alertFour = new Alert(4, "Winter Storm", 42.886088, -78.878685, "Mild", "ESE", 10); //buffalo
-		Alert alertFive = new Alert(5, "Hurricane", 29.950771, -90.071675, "Category 3", "NNW", 20, "Seek cover or evacuate immediately!"); //new orleans
+		Alert alertOne = new Alert(1, "Thunderstorm", 41.349307, -79.711084, "Severe", "E", 16, aDateTime); //cranberry
+		Alert alertTwo = new Alert(2, "Tornado", 42.112455, -80.063004, "Category 4", "SSE", 30, "Seek cover immediately!", aDateTime); //erie
+		Alert alertThree = new Alert(3, "Flash Flooding", 41.641134, -80.151444, aDateTime); //meadville
+		Alert alertFour = new Alert(4, "Winter Storm", 42.886088, -78.878685, "Mild", "ESE", 10, aDateTime); //buffalo
+		Alert alertFive = new Alert(5, "Hurricane", 29.950771, -90.071675, "Category 3", "NNW", 20, "Seek cover or evacuate immediately!", aDateTime); //new orleans
 		
 		Alert[] alertArray = {alertOne, alertTwo, alertThree, alertFour, alertFive};
 		
@@ -88,11 +92,10 @@ public class ZbaApplication implements CommandLineRunner{
 			
 			Alert testAlert = alertArray[i];
 			
-			
 			//insert new alert into database
-			String insertAlertQuery = String.format("INSERT INTO Alerts (name, severity, bearing, speed, action, alert_loc) " +
-					"VALUES ('%s', '%s', '%s', %d, '%s', ST_GeomFromText('POINT(%f %f)', 4326))",
-					testAlert.getName(), testAlert.getSeverity(), testAlert.getBearing(), testAlert.getSpeed(), testAlert.getAction(), testAlert.getLongitude(), testAlert.getLatitute());
+			String insertAlertQuery = String.format("INSERT INTO Alerts (name, severity, bearing, speed, action, alert_loc, expire) " +
+					"VALUES ('%s', '%s', '%s', %d, '%s', ST_GeomFromText('POINT(%f %f)', 4326), '%s')",
+					testAlert.getName(), testAlert.getSeverity(), testAlert.getBearing(), testAlert.getSpeed(), testAlert.getAction(), testAlert.getLongitude(), testAlert.getLatitute(), testAlert.getExpire());
 			
 			jdbcTemplate.update(insertAlertQuery);
 			
@@ -105,9 +108,9 @@ public class ZbaApplication implements CommandLineRunner{
 			String userQuery = String.format("SELECT email FROM users JOIN zones ON users.user_id = zones.user_id " 
 					+ "WHERE ST_Contains(zone_loc::geometry, ST_GeomFromText('POINT(%f %f)', 4326))", testAlert.getLongitude(), testAlert.getLatitute());
 			
-			//UserModel alertUser = (UserModel) jdbcTemplate.queryForObject(
-	        //        userQuery,
-	        //        new BeanPropertyRowMapper<UserModel>(UserModel.class));
+			UserModel alertUser = (UserModel) jdbcTemplate.queryForObject(
+	                userQuery,
+	                new BeanPropertyRowMapper<UserModel>(UserModel.class));
 			
 			List<String> emailList = jdbcTemplate.queryForList(userQuery, String.class);
 			
@@ -116,11 +119,11 @@ public class ZbaApplication implements CommandLineRunner{
 					+ "WHERE ST_Contains(zone_loc::geometry, ST_GeomFromText('POINT(%f %f)', 4326))", testAlert.getLongitude(), testAlert.getLatitute());
 			
 			
-			//Zone alertZone = (Zone) jdbcTemplate.queryForObject(
-	        //       zoneQuery,
-	        //        new BeanPropertyRowMapper<Zone>(Zone.class));
-			//
-			//List<Integer> zoneList = jdbcTemplate.queryForList(zoneQuery, Integer.class);
+			Zone alertZone = (Zone) jdbcTemplate.queryForObject(
+	               zoneQuery,
+	               new BeanPropertyRowMapper<Zone>(Zone.class));
+			
+			List<Integer> zoneList = jdbcTemplate.queryForList(zoneQuery, Integer.class);
 			
 			
 			for (int j = 0; j < emailList.size(); j++)
@@ -171,7 +174,7 @@ public class ZbaApplication implements CommandLineRunner{
 			//sleep for 30 seconds
 			Thread.sleep(30000);
 		}//while(true);
-		*/
+		
 	}
 
 }
