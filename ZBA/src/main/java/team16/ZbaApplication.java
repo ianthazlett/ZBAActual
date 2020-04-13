@@ -72,6 +72,7 @@ public class ZbaApplication implements CommandLineRunner{
 		int test = jdbcTemplate.update("INSERT INTO users(email, password, address, admin) VALUES(?,?,?,?)", params, types);	
 		System.out.print(test);*/
 		
+		
 		LocalDateTime aDateTime = LocalDateTime.of(2020, Month.APRIL, 13, 20, 00, 00);
 		
 		Alert alertOne = new Alert(1, "Thunderstorm", 41.349307, -79.711084, "Severe", "E", 16, aDateTime); //cranberry
@@ -80,24 +81,52 @@ public class ZbaApplication implements CommandLineRunner{
 		Alert alertFour = new Alert(4, "Winter Storm", 42.886088, -78.878685, "Mild", "ESE", 10, aDateTime); //buffalo
 		Alert alertFive = new Alert(5, "Hurricane", 29.950771, -90.071675, "Category 3", "NNW", 20, "Seek cover or evacuate immediately!", aDateTime); //new orleans
 		
+		
 		Alert[] alertArray = {alertOne, alertTwo, alertThree, alertFour, alertFive};
 		
+		Alert testAlert = alertArray[1];
+		
+		String insertAlertQuery = String.format("INSERT INTO Alerts (name, severity, bearing, speed, action, alert_loc, expire) " +
+				"VALUES ('%s', '%s', '%s', %d, '%s', ST_GeomFromText('POINT(%f %f)', 4326), '%s')",
+				testAlert.getName(), testAlert.getSeverity(), testAlert.getBearing(), testAlert.getSpeed(), testAlert.getAction(), testAlert.getLongitude(), testAlert.getLatitute(), testAlert.getExpire());
+		
+		jdbcTemplate.update(insertAlertQuery);
 		
 		while(true)
 		{
-			//get random new alert
-			Random rand = new Random();
+			LocalDateTime now = LocalDateTime.now();
+
+            String deleteQuery = String.format("DELETE FROM alerts WHERE expire < '%s'", LocalDateTime.now());
+            jdbcTemplate.update(deleteQuery);
+
+            Random random = new Random();
+
+            String[] alertType = {"Thunderstorm", "Tornado", "Flash Flooding", "Winter Storm", "Hurricane"};
+            String[] alertSeverity = {"Severe", "Warning", "Advisory"};
+            String[] alertBearing = {"N", "E", "S", "W", "NE", "NW", "SE", "SW", "NS", "SN"};
+            String[] alertAction = {"Perish", "Take Cover", "Stay Indoors", "Evacuate"};
+
+            int randomLatitude = random.nextInt(181) - 90;
+            int randomLongitude = random.nextInt(361) - 180;
+            int speed = random.nextInt(1001);
+
+            LocalDateTime randomTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond());
+
+            randomTime = randomTime.plusHours(random.nextInt(24));
+            randomTime = randomTime.plusMinutes(random.nextInt(60));
+            randomTime = randomTime.plusSeconds(random.nextInt(60));
 			
-			int i = rand.nextInt(5);
+			testAlert = new Alert(1, alertType[random.nextInt(5)], randomLatitude, randomLongitude, alertSeverity[random.nextInt(3)], alertBearing[random.nextInt(10)], speed, alertAction[random.nextInt(4)], randomTime);
 			
-			Alert testAlert = alertArray[i];
 			
 			//insert new alert into database
-			String insertAlertQuery = String.format("INSERT INTO Alerts (name, severity, bearing, speed, action, alert_loc, expire) " +
+			insertAlertQuery = String.format("INSERT INTO Alerts (name, severity, bearing, speed, action, alert_loc, expire) " +
 					"VALUES ('%s', '%s', '%s', %d, '%s', ST_GeomFromText('POINT(%f %f)', 4326), '%s')",
 					testAlert.getName(), testAlert.getSeverity(), testAlert.getBearing(), testAlert.getSpeed(), testAlert.getAction(), testAlert.getLongitude(), testAlert.getLatitute(), testAlert.getExpire());
+					
 			
 			jdbcTemplate.update(insertAlertQuery);
+			
 			
 			//get alert_id of new alert
 			String alertQuery = "SELECT MAX(alert_id) FROM alerts";
@@ -108,9 +137,11 @@ public class ZbaApplication implements CommandLineRunner{
 			String userQuery = String.format("SELECT email FROM users JOIN zones ON users.user_id = zones.user_id " 
 					+ "WHERE ST_Contains(zone_loc::geometry, ST_GeomFromText('POINT(%f %f)', 4326))", testAlert.getLongitude(), testAlert.getLatitute());
 			
+			/*
 			UserModel alertUser = (UserModel) jdbcTemplate.queryForObject(
 	                userQuery,
 	                new BeanPropertyRowMapper<UserModel>(UserModel.class));
+	        */
 			
 			List<String> emailList = jdbcTemplate.queryForList(userQuery, String.class);
 			
@@ -118,10 +149,11 @@ public class ZbaApplication implements CommandLineRunner{
 			String zoneQuery = String.format("SELECT zone_id FROM users JOIN zones ON users.user_id = zones.user_id " 
 					+ "WHERE ST_Contains(zone_loc::geometry, ST_GeomFromText('POINT(%f %f)', 4326))", testAlert.getLongitude(), testAlert.getLatitute());
 			
-			
+			/*
 			Zone alertZone = (Zone) jdbcTemplate.queryForObject(
 	               zoneQuery,
 	               new BeanPropertyRowMapper<Zone>(Zone.class));
+	               */
 			
 			List<Integer> zoneList = jdbcTemplate.queryForList(zoneQuery, Integer.class);
 			
@@ -172,7 +204,7 @@ public class ZbaApplication implements CommandLineRunner{
 			}
 		
 			//sleep for 30 seconds
-			Thread.sleep(30000);
+			Thread.sleep(1000);
 		}//while(true);
 		
 	}
