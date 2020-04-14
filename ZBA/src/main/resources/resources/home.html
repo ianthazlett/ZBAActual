@@ -790,7 +790,7 @@ body {
 			</div>
 		</div>
 	</section>
-	<div>
+	<div id="ZoneHolder">
 		<form method="post" id="izgch" class="form">
 			<button type="submit" id="NewZone" onclick="CreateZone()" class="button">New Zone</button>
 			<div data-form-state="success" id="inm3i" class="state-success">
@@ -809,17 +809,7 @@ body {
 						<div id="iriz">
 							<input id="pac-input" class="controls" type="text" placeholder="Search Box">
 							<div id="map"></div>
-							<div hidden id="radius"></div>
-							<div hidden id="center"></div>
-							<div hidden id="path"></div>
-							<div id="info"></div>
-						</div>
-					</div>
-					<div id="ActiveAlerts" class="gpd-text">
-						Active Alerts
-					</div>
-					<div class="cell">
-						<div id="indg" class="gpd-text">
+							<div id="indg" class="gpd-text">
 							<p>Zone options:</p>
 							
 							<div class="d-flex justify-content-center my-4">
@@ -934,6 +924,14 @@ body {
 							</div>
 							
 						</div>
+							<div hidden id="radius"></div>
+							<div hidden id="center"></div>
+							<div hidden id="path"></div>
+							<div id="info"></div>
+						</div>
+					</div>
+					<div id="ActiveAlerts" class="gpd-text">
+						Active Alerts
 					</div>
 				</ul>
 			</div>
