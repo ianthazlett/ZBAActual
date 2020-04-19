@@ -39,6 +39,7 @@
 
 
 <link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/toolTips.css">
 <link rel="stylesheet" href="styles/page-4-style.css">
 <link rel="stylesheet" href="styles/Map.css">
 
@@ -620,7 +621,7 @@ function initMap(zone)
 	var updateZone = new UpdateZone(updateZoneDiv, map, sessionStorage.getItem("zoneID"));
 	
 	updateZoneDiv.index = 1;
-	updateZoneDiv.style['padding-top'] = '10px';
+	updateZoneDiv.style['padding-top'] = '20px';
 	map.controls[google.maps.ControlPosition.TOP_CENTER].push(updateZoneDiv);
 	
 	
@@ -630,7 +631,7 @@ function initMap(zone)
 	var deleteZone = new DeleteZone(deleteZoneDiv, map, sessionStorage.getItem("zoneID"));
 	
 	deleteZoneDiv.index = 1;
-	deleteZoneDiv.style['padding-top'] = '10px';
+	deleteZoneDiv.style['padding-top'] = '20px';
 	map.controls[google.maps.ControlPosition.TOP_CENTER].push(deleteZoneDiv);
 //^-----------------------------------------------------------------------------------------------------------------------^//
 //V--------------------------------------------Init Given Shape On Map(Fix to show circles as circles)----------------------------V//
@@ -684,12 +685,6 @@ function initMap(zone)
         flashFloodingSpanNumber.innerHTML = zone.flash_flooding;
         winterStormSpanNumber.innerHTML = zone.winter_storm;
         hurricaneSpanNumber.innerHTML = zone.hurricane;
-        
-        //alert(zone.tornado);
-        //alert(zone.hurricane);
-        //alert(zone.thunderstorm);
-        //alert(zone.winter_storm);
-        //alert(zone.flash_flooding);
   		
   		google.maps.event.addDomListener(thunderstorm, "change", function() 
   		{
@@ -778,10 +773,6 @@ body {
         			-->
 				</div>
 				<div id="i1c8" class="cell">
-					<div id="iec6" class="gpd-text">USERNAME</div>
-					<form method="post" id="ieh9" class="form">
-						<button type="submit" id="i9v94" class="button">Signout</button>
-					</form>
 					<div id="AdminSearchDiv" hidden>
 						<input type="text" id="AdminSearchBar" placeholder="Search for email.." disabled>
 						<button type="button" id="AdminSearchButton" class="button" onClick="adminSearch()" disabled>Submit</button>
@@ -790,13 +781,17 @@ body {
 			</div>
 		</div>
 	</section>
+	<div class="tooltip" style="position:absolute; left:120px;">
+		Zones:
+		<span class="tooltiptext">
+			This section will display all of your zones that you have set.
+			Clicking a zone's tab will show you the zone, zone options, and active alerts for the selected zone.
+			If you want to create a new zone, simply click the "New Zone" button, create your desired zone using the given Google Map tools, and click "Update Zone" on the map.
+		</span>
+	</div>
 	<div id="ZoneHolder">
 		<form method="post" id="izgch" class="form">
 			<button type="submit" id="NewZone" onclick="CreateZone()" class="button">New Zone</button>
-			<div data-form-state="success" id="inm3i" class="state-success">
-				Thanks! We received your request</div>
-			<div data-form-state="error" id="i1cea" class="state-error">An
-				error occurred on processing your request, try again!</div>
 		</form>
 		<div class="btn-group" id="tabs">
 			<input type="button" value="Zone 1" id="button1" onClick="refreshAndUpdate(0)">
@@ -810,7 +805,14 @@ body {
 							<input id="pac-input" class="controls" type="text" placeholder="Search Box">
 							<div id="map"></div>
 							<div id="indg" class="gpd-text">
-							<p>Zone options:</p>
+							<div class="tooltip">Zone options:
+								<span class="tooltiptext">
+									This section will allow you to set what weather patterns you want to be warned about. 
+									You can adjust the distance out from the center of your zone with the provided sliders and click "Update Zone" to lock in your set values.
+									The system will then see if any alerts fall within this expanded, or contracted area.
+									Due to the nature of weather, it can change wildly in size and location throughout the event and as such, we recommend setting a distance greater than your zone to give you the best chance of receiving the information you need.
+								</span>
+							</div>
 							
 							<div class="d-flex justify-content-center my-4">
 								<script type="text/javascript">
@@ -930,8 +932,12 @@ body {
 							<div id="info"></div>
 						</div>
 					</div>
-					<div id="ActiveAlerts" class="gpd-text">
+					<div id="ActiveAlerts" class="tooltip">
 						Active Alerts
+						<span class="tooltiptext">
+							This section will display all active alerts for the currently selected zone.
+							This section will automatically update as alerts are received or time out.
+						</span>
 					</div>
 				</ul>
 			</div>
